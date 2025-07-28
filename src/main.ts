@@ -1,17 +1,7 @@
-import Handlebars from 'handlebars';
-import { textTemplate, type IText } from './templates/text.template';
-
-const TextProps: IText = {
-  textName: 'lol',
-  label: 'kek'
-}
+import { Button } from './templates/button/button';
 
 document.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('#app');
-
-  const buttonTemplateCompiled = Handlebars.compile(textTemplate)
-
-  const result = buttonTemplateCompiled(TextProps)
-
-  root.innerHTML = result
+  const buttonElement = Button({ label: 'Click Me' });
+  root!.appendChild(buttonElement);
 })
