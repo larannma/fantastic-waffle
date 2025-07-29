@@ -1,7 +1,6 @@
-import { Button } from './templates/button/button';
+import App from "./App"
 
 document.addEventListener('DOMContentLoaded', () => {
-  const root = document.querySelector('#app');
-  const buttonElement = Button({ label: 'Click Me' });
-  root!.appendChild(buttonElement);
-})
+  const app = new App();
+  app.render();
+});
