@@ -1,12 +1,29 @@
 import Handlebars from "handlebars";
 
-import { RegisterPage } from "./pages/RegisterPage";
-import { LoginPage } from "./pages/LoginPage";
+import { registerPage } from "./pages/registerPage";
+import { loginPage } from "./pages/loginPage";
+import { serverErrorPage } from "./pages/serverErrorPage";
+import { notFoundPage } from "./pages/notFoundPage";
+import { chatsPage } from "./pages/chatsPage";
+
+// helpers
+Handlebars.registerHelper('array', function () {
+  return Array.prototype.slice.call(arguments, 0, -1);
+});
+
+// partials
+import { Link } from "./components/Link";
+import { Button } from "./components/Button";
+import { Input } from "./components/Input";
+
+Handlebars.registerPartial('Link', Link);
+Handlebars.registerPartial('Button', Button);
+Handlebars.registerPartial('Input', Input);
 
 const pages = {
   0: 'login',
   1: 'register',
-  2: 'chat',
+  2: 'chats',
   3: 'profile',
   4: 'server_error',
   5: 'not_found_error'
@@ -15,12 +32,14 @@ const pages = {
 type Page = typeof pages[keyof typeof pages];
 
 export default class App {
-  state: { currentPage: Page };
+  state: {
+    currentPage: Page
+  };
   appContainer: HTMLElement;
 
   constructor(){
     this.state = {
-      currentPage: 'login'
+      currentPage: 'chats'
     }
 
     this.appContainer = document.getElementById('app');
@@ -28,18 +47,26 @@ export default class App {
 
   render() {
     let template;
-    // here we want to chech the current page and render the current page from the template
     switch (this.state.currentPage){
+      case 'chats':
+        template = Handlebars.compile(chatsPage);
+        this.appContainer.innerHTML = template({});
+        break;
       case 'login':
-        // compiling the login template
-        template = Handlebars.compile(LoginPage);
+        template = Handlebars.compile(loginPage);
         this.appContainer.innerHTML = template({});
         break;
       case 'register':
-        // compiling the register template
-        template = Handlebars.compile(RegisterPage);
+        template = Handlebars.compile(registerPage);
         this.appContainer.innerHTML = template({});
         break;
+      case 'server_error':
+        template = Handlebars.compile(serverErrorPage);
+        this.appContainer.innerHTML = template({});
+        break;
+      case 'not_found_error':
+        template = Handlebars.compile(notFoundPage);
+        this.appContainer.innerHTML = template({});
         break;
     }
   }

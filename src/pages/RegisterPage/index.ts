@@ -1,1 +1,3 @@
-export { default as RegisterPage } from './RegisterPage.hbs?raw';
+import './registerPage.scss';
+
+export { default as registerPage } from './registerPage.hbs?raw';

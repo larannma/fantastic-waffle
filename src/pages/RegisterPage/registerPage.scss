@@ -5,7 +5,7 @@
   display: flex;
 }
 
-.login{
+.register{
   display: flex;
   flex-direction: column;
   margin: auto;
@@ -16,26 +16,27 @@
   border-radius: 15px;
 }
 
-.login__title{
+.register__title{
   align-self: center;
   margin-bottom: 40px;
   font-size: $text-size-m;
 }
 
-.login__form{
+.register__form{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   flex: 1;
 }
 
-.login__input-wrapper{
+.register__input-wrapper{
   display: flex;
   flex-direction: column;
   gap: 20px
 }
 
-.login__footer{
+.register__footer{
   display: flex;
   flex-direction: column;
+  margin-top: 70px;
 }

@@ -1,3 +1,3 @@
 import './loginPage.scss';
 
-export { default as LoginPage } from './LoginPage.hbs?raw';
+export { default as loginPage } from './loginPage.hbs?raw';

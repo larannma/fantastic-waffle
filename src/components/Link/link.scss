@@ -1,0 +1,9 @@
+@use '../../styles/variables.scss' as *;
+
+.link {
+  font-size: $text-size-xs;
+  font-weight: 500;
+  margin-top: 30px;
+  color: $accent-color;
+  align-self: center;
+}

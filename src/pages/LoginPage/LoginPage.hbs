@@ -1,3 +1,15 @@
-<div class="login">
-  login page
+<div class="app">
+  <div class="login">
+    <p class="login__title">Login</p>
+    <form class="login__form">
+      <div class="login__input-wrapper">
+        {{> Input id='login' label='Login' type='text'}}
+        {{> Input id='password' label='Password' type='password'}}
+      </div>
+      <div class="login__footer">
+        {{> Button label='Sign in'}}
+        {{> Link title='Dont have an account? create'}}
+      </div>
+    </div>
+  </div>
 </div>

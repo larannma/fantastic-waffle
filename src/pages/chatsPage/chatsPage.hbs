@@ -1,0 +1,31 @@
+<div class="app">
+  <div class="chats__left-pannel">
+    <div class="chats__wrapper">
+      <div class="chats__link-container">
+        <a class="chats__link">Profile ></a>
+        {{!-- add icon --}}
+      </div>
+      <input class="chats__search-input" type="text" id="search" placeholder="search">
+      <div class="chats__list">
+        {{#each (array 1 2 3 4 5 6 7 8 9 10 11 12 13)}}
+        <div class="chat">
+          <div class="chat__main-info">
+            <img class="chat__img" />
+            <div class="chat__info">
+              <p class="chat__name">Anna Larionova</p>
+              <p class="chat__message">You are duing great dude! Keep it up</p>
+            </div>
+          </div>
+          <div class="chat__metadata">
+            <p class="chat__time">12:15</p>
+            <div class="chat__number-of-unread-messages">2</div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    </div>
+  <div class="chats__current-chat">
+
+  </div>
+</div>

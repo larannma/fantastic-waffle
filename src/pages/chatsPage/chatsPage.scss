@@ -1,0 +1,131 @@
+@use '../../styles/variables.scss' as *;
+
+.app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.chats__left-pannel{
+  box-sizing: border-box;
+  border-right: 2px solid $grey-border;
+  max-width: 350px;
+  width: 100%;
+  background-color: $grey-light;
+}
+
+.chats__wrapper{
+  display: flex;
+  flex-direction: column;
+}
+
+.chats__link-container{
+  color: $secondary-color;
+  display: flex;
+  justify-content: end;
+  margin: 20px 10px;
+}
+
+.chats__link{
+
+}
+
+.chats__search-input{
+  width: calc(100% - 20px);
+  margin: 0 10px 20px;
+  padding: 8px 0;
+  outline: none;
+  border: none;
+  background-color: $grey;
+  text-align: center;
+  border-radius: $border-radius-xs;
+}
+
+.chats__list{
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  element::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chat{
+  border-top: 1px solid $grey-border;
+  border-bottom: 1px solid $grey-border;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.chat:hover {
+  border-top: 1px solid $grey-border;
+  border-bottom: 1px solid $grey-border;
+  display: flex;
+  padding: 10px;
+  background-color: $chat-hover;
+}
+
+.chat__main-info{
+  display: flex;
+  gap: 10px;
+}
+
+.chat__img{
+  width: 50px;
+  height: 50px;
+  clip-path: circle(50%);
+  background-color: $grey;
+}
+
+.chat__info{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chat__name{
+  margin: 0;
+  text-overflow: ellipsis;
+  font-size: $text-size-xs;
+}
+
+.chat__message{
+  margin: 0;
+  text-overflow: ellipsis;
+  color: $secondary-color;
+  font-size: $text-size-xxs;
+  max-width: 150px;
+  max-height: 40px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.chat__metadata{
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chat__time{
+  margin: 0;
+  color: $secondary-color;
+  font-size: $text-size-xxs;
+}
+
+.chat__number-of-unread-messages{
+  width: 20px;
+  height: 20px;
+  clip-path: circle(50%);
+  background-color: $accent-color;
+  color: $white;
+  font-size: $text-size-xxs;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.chats__current-chat{
+
+}
