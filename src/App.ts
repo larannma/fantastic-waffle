@@ -8,13 +8,14 @@ import { chatsPage } from "./pages/chatsPage";
 
 // helpers
 Handlebars.registerHelper('array', function () {
-  return Array.prototype.slice.call(arguments, 0, -1);
+  return new Array(arguments[0]).fill(0).map((_, index) => index);
 });
 
 // partials
 import { Link } from "./components/Link";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
+import { profilePage } from "./pages/profilePage";
 
 Handlebars.registerPartial('Link', Link);
 Handlebars.registerPartial('Button', Button);
@@ -41,7 +42,6 @@ export default class App {
     this.state = {
       currentPage: 'chats'
     }
-
     this.appContainer = document.getElementById('app');
   }
 
@@ -50,6 +50,10 @@ export default class App {
     switch (this.state.currentPage){
       case 'chats':
         template = Handlebars.compile(chatsPage);
+        this.appContainer.innerHTML = template({});
+        break;
+      case 'profile':
+        template = Handlebars.compile(profilePage);
         this.appContainer.innerHTML = template({});
         break;
       case 'login':
@@ -68,6 +72,13 @@ export default class App {
         template = Handlebars.compile(notFoundPage);
         this.appContainer.innerHTML = template({});
         break;
+    }
+    this.attachEventListeners()
+  }
+
+  attachEventListeners(){
+    if (this.state.currentPage === 'login'){
+
     }
   }
 }
