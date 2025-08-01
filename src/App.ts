@@ -16,10 +16,12 @@ import { Link } from "./components/Link";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { profilePage } from "./pages/profilePage";
+import { routes } from "./components/routes";
 
 Handlebars.registerPartial('Link', Link);
 Handlebars.registerPartial('Button', Button);
 Handlebars.registerPartial('Input', Input);
+Handlebars.registerPartial('routes', routes);
 
 const pages = {
   0: 'login',
@@ -74,6 +76,7 @@ export default class App {
         break;
     }
     this.attachEventListeners()
+    this.registerRoutes()
   }
 
   attachEventListeners(){
@@ -137,5 +140,43 @@ export default class App {
         this.render()
       })
     }
+  }
+
+  registerRoutes(){
+    const notFoundRoute = document.querySelector('.routes__no-found');
+    notFoundRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'not_found_error'
+      this.render()
+    })
+
+    const serverErrorRoute = document.querySelector('.routes__server-error');
+    serverErrorRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'server_error'
+      this.render()
+    })
+
+    const profileRoute = document.querySelector('.routes__profile');
+    profileRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'profile'
+      this.render()
+    })
+
+    const chatsRoute = document.querySelector('.routes__chats');
+    chatsRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'chats'
+      this.render()
+    })
+
+    const registerRoute = document.querySelector('.routes__register');
+    registerRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'register'
+      this.render()
+    })
+
+    const loginRoute = document.querySelector('.routes__login');
+    loginRoute!.addEventListener('click', () => {
+      this.state.currentPage = 'login'
+      this.render()
+    })
   }
 }
