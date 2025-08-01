@@ -36,11 +36,11 @@ export default class App {
   state: {
     currentPage: Page
   };
-  appContainer: HTMLElement;
+  appContainer: HTMLElement | null;
 
   constructor(){
     this.state = {
-      currentPage: 'chats'
+      currentPage: 'login'
     }
     this.appContainer = document.getElementById('app');
   }
@@ -50,27 +50,27 @@ export default class App {
     switch (this.state.currentPage){
       case 'chats':
         template = Handlebars.compile(chatsPage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
       case 'profile':
         template = Handlebars.compile(profilePage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
       case 'login':
         template = Handlebars.compile(loginPage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
       case 'register':
         template = Handlebars.compile(registerPage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
       case 'server_error':
         template = Handlebars.compile(serverErrorPage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
       case 'not_found_error':
         template = Handlebars.compile(notFoundPage);
-        this.appContainer.innerHTML = template({});
+        this.appContainer!.innerHTML = template({});
         break;
     }
     this.attachEventListeners()
@@ -78,7 +78,64 @@ export default class App {
 
   attachEventListeners(){
     if (this.state.currentPage === 'login'){
-
+      const signInButton = document.querySelector('.login__sign-in-button')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'chats'
+        this.render()
+      })
+      const goToRegisterButton = document.querySelector('.login__register-link')
+      goToRegisterButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'register'
+        this.render()
+      })
+    }
+    if (this.state.currentPage === 'register'){
+      const signInButton = document.querySelector('.register__register-button')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'login'
+        this.render()
+      })
+      const goToRegisterButton = document.querySelector('.register__sign-in-link')
+      goToRegisterButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'login'
+        this.render()
+      })
+    }
+    if (this.state.currentPage === 'not_found_error'){
+      const signInButton = document.querySelector('.notFoundPage__back-to-chats')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'chats'
+        this.render()
+      })
+    }
+    if (this.state.currentPage === 'server_error'){
+      const signInButton = document.querySelector('.serverError__back-to-chats')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'chats'
+        this.render()
+      })
+    }
+    if (this.state.currentPage === 'chats'){
+      const signInButton = document.querySelector('.chats__profile-link')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'profile'
+        this.render()
+      })
+    }
+    if (this.state.currentPage === 'profile'){
+      const signInButton = document.querySelector('.profile__back-to-chats')
+      signInButton?.addEventListener('click', (e) => {
+        e.preventDefault()
+        this.state.currentPage = 'chats'
+        this.render()
+      })
     }
   }
 }
