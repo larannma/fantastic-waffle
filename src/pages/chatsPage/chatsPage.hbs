@@ -1,0 +1,79 @@
+<div class="app">
+  <div class="chats__left-panel">
+    <div class="chats__wrapper">
+      <div class="chats__link-container">
+        <a class="chats__link chats__profile-link">Profile &gt;</a>
+        {{!-- TODO: Add arrow icon --}}
+      </div>
+
+      <input class="chats__search-input" type="text" id="search" placeholder="Search" />
+
+      <ul class="chats__list">
+        {{#each (array 20)}}
+        <li class="chat">
+          <div class="chat__main-info">
+            <img class="chat__img" src="/icons/chat-svgrepo-com.svg" alt="user" />
+            <div class="chat__info">
+              <p class="chat__name">Anna Larionova</p>
+              <p class="chat__message">You're doing great dude! Keep it up.</p>
+            </div>
+          </div>
+          <div class="chat__metadata">
+            <p class="chat__time">12:15</p>
+            <div class="chat__number-of-unread-messages">2</div>
+          </div>
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+
+  <div class="chats__current-chat">
+    <div class="chat__current-header">
+      <div class="chat__current-header-info">
+        <img class="chat__current-img" src="/icons/gendalf_smile.jpg" alt="current user" />
+        <p class="chat__current-name">Anna Larionova</p>
+      </div>
+      <img class="chat__attach-icon" src="/icons/three-dots-svgrepo-com.svg" alt="menu" />
+    </div>
+
+    <div class="mainchat__content">
+      {{!-- TODO: Render messages with conditionals --}}
+      <p class="mainchat__message-date">12 June</p>
+
+      <div class="mainchat__messages-wrapper">
+        <div class="mainchat__message-container message-container_incoming">
+          <p class="mainchat__message mainchat__message_text">
+            Thereupon  Elrond  paused  a  while  and  sighed.  ‘I  remember 
+            well  the  splendour  of  their  banners,’  he  said.  ‘It  recalled  to 
+            me  the  glory  of  the  Elder  Days  and  the  hosts  of  Beleriand, 
+            so  many  great  princes  and  captains  were  assembled.  And  yet 
+            not  so  many,  nor  so  fair,  as  when  Thangorodrim  was  broken, 
+            and  the  Elves  deemed  that  evil  was  ended  for  ever,  and  it  was 
+            not  so
+          </p>
+        </div>
+
+        <div class="mainchat__message-container message-container_incoming">
+          <img src="/icons/frodo.jpeg" alt="frodo" class="mainchat__message mainchat__message_image" />
+        </div>
+
+        <div class="mainchat__message-container mainchat__message-container_answer">
+          <p class="mainchat__message mainchat__message_text mainchat__message_answer">
+            You  remember?’  said  Frodo,  speaking  his  thought  aloud 
+            in  his  astonishment.  ‘But  I  thought,’  he  stammered  as  Elrond 
+            turned  towards  him,  ‘I  thought  that  the  fall  of  Gil-galad  was 
+            a  long  age  ago
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat__footer">
+      <img class="chat__attach-icon" src="/icons/attach-svgrepo-com.svg" alt="attach" />
+      <input class="chat__send-message-input" type="text" id="message" placeholder="Send message" />
+      <img class="chat__attach-icon" src="/icons/arrow-right-circle-svgrepo-com.svg" alt="send" />
+    </div>
+  </div>
+  {{> routes}}
+</div>

@@ -1,0 +1,41 @@
+@use '../../styles/variables.scss' as *;
+
+.app {
+  height: 100%;
+  display: flex;
+}
+
+.login{
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 340px;
+  min-height: 450px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  border-radius: 15px;
+}
+
+.login__title{
+  align-self: center;
+  margin-bottom: 40px;
+  font-size: $text-size-m;
+}
+
+.login__form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.login__input-wrapper{
+  display: flex;
+  flex-direction: column;
+  gap: 20px
+}
+
+.login__footer{
+  display: flex;
+  flex-direction: column;
+}
