@@ -1,10 +1,10 @@
 import Handlebars from "handlebars";
 
-import { registerPage } from "./pages/registerPage";
-import { loginPage } from "./pages/loginPage";
+import { registerPage } from "./pages/registrationPage";
 import { serverErrorPage } from "./pages/serverErrorPage";
 import { notFoundPage } from "./pages/notFoundPage";
 import { chatsPage } from "./pages/chatsPage";
+import { loginPage } from "./pages/loginnPage";
 
 // helpers
 Handlebars.registerHelper('array', function () {
