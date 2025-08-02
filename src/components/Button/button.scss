@@ -1,0 +1,10 @@
+@use '../../styles/variables.scss' as *;
+
+.button {
+  background-color: $accent-color;
+  padding: 10px;
+  border: none;
+  color: $white;
+  border-radius: $border-radius-xs;
+  cursor: pointer;
+}

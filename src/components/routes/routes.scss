@@ -1,0 +1,21 @@
+@use '../../styles/variables.scss' as *;
+
+.routes{
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba($color: #477cd8, $alpha: 0.2);
+  border-radius: 5px;
+}
+
+.route{
+  background-color: $accent-color;
+  color: $white;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+}

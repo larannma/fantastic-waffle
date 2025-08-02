@@ -1,0 +1,256 @@
+@use '../../styles/variables.scss' as *;
+
+.app {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.chats__left-panel {
+  box-sizing: border-box;
+  border-right: 1px solid $grey-border;
+  max-width: 350px;
+  width: 100%;
+  background-color: $grey-light;
+}
+
+.chats__wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chats__link-container {
+  color: $secondary-color;
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 10px;
+}
+
+.chats__link {
+  font-size: $text-size-xs;
+  text-decoration: none;
+  color: $secondary-color;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.chats__search-input {
+  width: calc(100% - 20px);
+  margin: 10px;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  outline: none;
+  border: none;
+  background-color: $grey;
+  text-align: center;
+  border-radius: $border-radius-xs;
+  box-sizing: border-box;
+}
+
+.chats__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: scroll;
+
+  scrollbar-width: none;
+}
+
+.chat {
+  border-top: 1px solid $grey-border;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $chat-hover;
+  }
+
+  &__main-info {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__img {
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: $grey;
+    padding: 5px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__name {
+    margin: 0;
+    font-size: $text-size-xs;
+    font-weight: 500;
+  }
+
+  &__message {
+    margin: 0;
+    color: $secondary-color;
+    font-size: $text-size-xxs;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__metadata {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+
+  &__time {
+    margin: 0;
+    color: $secondary-color;
+    font-size: $text-size-xxs;
+  }
+
+  &__number-of-unread-messages {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: $accent-color;
+    color: $white;
+    font-size: $text-size-xxs;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.chats__current-chat {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+}
+
+.chat__current-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid $grey-border;
+
+  &-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.chat__current-img {
+  width: 35px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: $grey;
+}
+
+.chat__current-name {
+  font-weight: 700;
+}
+
+.mainchat__content {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.mainchat__message-date {
+  text-align: center;
+  position: absolute;
+  top: 3%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: $secondary-color;
+}
+
+.mainchat__messages-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mainchat__message-container {
+  display: flex;
+
+  &_incoming {
+    justify-content: flex-start;
+  }
+
+  &_answer {
+    justify-content: flex-end;
+  }
+}
+
+.mainchat__message {
+  background-color: $grey-light;
+  border-radius: $border-radius-xs;
+
+  &_text {
+    max-width: 450px;
+    padding: 16px;
+    font-size: $text-size-xs;
+    line-height: 1.5;
+  }
+
+  &_answer {
+    background-color: $chat-hover;
+  }
+
+  &_image {
+    width: 320px;
+    border: 1px solid $grey-border;
+    border-radius: $border-radius-xs;
+  }
+}
+
+.chat__footer {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid $grey-border;
+}
+
+.chat__attach-icon {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+.chat__send-message-input {
+  width: 100%;
+  padding: 8px 12px;
+  outline: none;
+  border: none;
+  background-color: $grey;
+  border-radius: $border-radius-xs;
+  font-size: $text-size-xs;
+}

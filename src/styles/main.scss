@@ -1,0 +1,8 @@
+@use './variables.scss' as *;
+
+#app{
+  width: 100%;
+  height: 100vh;
+  font-family: $font;
+  color: #1E1E1E;
+}

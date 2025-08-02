@@ -1,7 +1,10 @@
-import { Button } from './templates/button/button';
+import App from "./App"
+import './styles/main.scss'
+import './styles/normalize.scss'
+import './styles/variables.scss'
+import './styles/fonts.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
-  const root = document.querySelector('#app');
-  const buttonElement = Button({ label: 'Click Me' });
-  root!.appendChild(buttonElement);
-})
+  const app = new App();
+  app.render();
+});
