@@ -6,7 +6,7 @@
         {{!-- TODO: Add arrow icon --}}
       </div>
 
-      <input class="chats__search-input" type="text" id="search" placeholder="Search" />
+      <input class="chats__search-input" type="text" id="search" name="search" placeholder="Search" />
 
       <ul class="chats__list">
         {{#each (array 20)}}
@@ -71,7 +71,7 @@
 
     <div class="chat__footer">
       <img class="chat__attach-icon" src="/icons/attach-svgrepo-com.svg" alt="attach" />
-      <input class="chat__send-message-input" type="text" id="message" placeholder="Send message" />
+      <input class="chat__send-message-input" type="text" id="message" name="message" placeholder="Send message" />
       <img class="chat__attach-icon" src="/icons/arrow-right-circle-svgrepo-com.svg" alt="send" />
     </div>
   </div>
