@@ -79,68 +79,97 @@ export default class App {
     this.registerRoutes()
   }
 
-  attachEventListeners(){
-    if (this.state.currentPage === 'login'){
-      const signInButton = document.querySelector('.login__sign-in-button')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'chats'
-        this.render()
-      })
-      const goToRegisterButton = document.querySelector('.login__register-link')
-      goToRegisterButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'register'
-        this.render()
-      })
-    }
-    if (this.state.currentPage === 'register'){
-      const signInButton = document.querySelector('.register__register-button')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'login'
-        this.render()
-      })
-      const goToRegisterButton = document.querySelector('.register__sign-in-link')
-      goToRegisterButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'login'
-        this.render()
-      })
-    }
-    if (this.state.currentPage === 'not_found_error'){
-      const signInButton = document.querySelector('.notFoundPage__back-to-chats')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'chats'
-        this.render()
-      })
-    }
-    if (this.state.currentPage === 'server_error'){
-      const signInButton = document.querySelector('.serverError__back-to-chats')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'chats'
-        this.render()
-      })
-    }
-    if (this.state.currentPage === 'chats'){
-      const signInButton = document.querySelector('.chats__profile-link')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'profile'
-        this.render()
-      })
-    }
-    if (this.state.currentPage === 'profile'){
-      const signInButton = document.querySelector('.profile__back-to-chats')
-      signInButton?.addEventListener('click', (e) => {
-        e.preventDefault()
-        this.state.currentPage = 'chats'
-        this.render()
-      })
+  attachEventListeners() {
+    switch (this.state.currentPage) {
+      case 'login': {
+        const signInButton = document.querySelector('.login__sign-in-button');
+        signInButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'chats';
+          this.render();
+        });
+  
+        const goToRegisterButton = document.querySelector('.login__register-link');
+        goToRegisterButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'register';
+          this.render();
+        });
+        break;
+      }
+  
+      case 'register': {
+        const signInButton = document.querySelector('.register__register-button');
+        signInButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'login';
+          this.render();
+        });
+  
+        const goToRegisterButton = document.querySelector('.register__sign-in-link');
+        goToRegisterButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'login';
+          this.render();
+        });
+        break;
+      }
+  
+      case 'not_found_error': {
+        const signInButton = document.querySelector('.notFoundPage__back-to-chats');
+        signInButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'chats';
+          this.render();
+        });
+        break;
+      }
+  
+      case 'server_error': {
+        const signInButton = document.querySelector('.serverError__back-to-chats');
+        signInButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'chats';
+          this.render();
+        });
+        break;
+      }
+  
+      case 'chats': {
+        const profileLink = document.querySelector('.chats__profile-link');
+        profileLink?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'profile';
+          this.render();
+        });
+  
+        const sendMessage = document.querySelector('.chat__send-message-button');
+        sendMessage?.addEventListener('click', (e) => {
+          e.preventDefault();
+        });
+        break;
+      }
+  
+      case 'profile': {
+        const backButton = document.querySelector('.profile__back-to-chats');
+        backButton?.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.state.currentPage = 'chats';
+          this.render();
+        });
+  
+        const saveChanges = document.querySelector('.profile__save-btn');
+        saveChanges?.addEventListener('click', (e) => {
+          e.preventDefault();
+        });
+        break;
+      }
+  
+      default:
+        break;
     }
   }
+  
 
   registerRoutes(){
     const notFoundRoute = document.querySelector('.routes__no-found');

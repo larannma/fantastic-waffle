@@ -1,4 +1,4 @@
-<div class="app">
+<main class="main">
   <div class="chats__left-panel">
     <div class="chats__wrapper">
       <div class="chats__link-container">
@@ -27,7 +27,6 @@
       </ul>
     </div>
   </div>
-
   <div class="chats__current-chat">
     <div class="chat__current-header">
       <div class="chat__current-header-info">
@@ -70,10 +69,14 @@
     </div>
 
     <div class="chat__footer">
-      <img class="chat__attach-icon" src="/icons/attach-svgrepo-com.svg" alt="attach" />
-      <input class="chat__send-message-input" type="text" id="message" name="message" placeholder="Send message" />
-      <img class="chat__attach-icon" src="/icons/arrow-right-circle-svgrepo-com.svg" alt="send" />
+      <form class="chat__form">
+        <img class="chat__attach-icon" src="/icons/attach-svgrepo-com.svg" alt="attach" />
+        <input class="chat__send-message-input" type="text" id="message" name="message" placeholder="Send message" />
+        <button type="submit" class="chat__send-message-button">
+          <img class="chat__attach-icon" src="/icons/arrow-right-circle-svgrepo-com.svg" alt="send" />
+        </button>
+      </form>
     </div>
   </div>
   {{> routes}}
-</div>
+</main>

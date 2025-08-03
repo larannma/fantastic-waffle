@@ -1,4 +1,4 @@
-<div class="app">
+<main class="main">
   <div class="profile__back profile__back-to-chats">
     <img class="profile__back-icon" src="/icons/arrow-right-circle-svgrepo-com.svg" />
   </div>
@@ -69,10 +69,9 @@
           <label for="newPassword">New Password</label>
           <input type="password" name="newPassword" id="newPassword" name="newPassword" />
         </div>
-
-        <button type="button" class="profile__save-btn">Save</button>
+        {{> Button type="submit" class="profile__save-btn" label="Save"}}
       </form>
     </div>
   </div>
   {{> routes}}
-</div>
+</main>

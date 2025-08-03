@@ -1,4 +1,4 @@
-<div class="app">
+<main class="main">
   <div class="register">
     <p class="register__title">Register</p>
     <form class="register__form">
@@ -11,10 +11,10 @@
         {{> Input id='password' label='Password' type='password'}}
       </div>
       <div class="register__footer">
-        {{> Button label='Register' class='register__register-button'}}
+        {{> Button label='Register' class='register__register-button' type='submit'}}
         {{> Link title='Sign in' class='register__sign-in-link'}}
       </div>
     </div>
   </div>
   {{> routes}}
-</div>
+</main>
