@@ -1,0 +1,22 @@
+{
+  "name": "fantastic-waffle",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "vite build && node server.js",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.1",
+    "sass": "^1.89.2",
+    "typescript": "^5.9.2",
+    "vite": "7.0.4"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "handlebars": "^4.7.8"
+  }
+}

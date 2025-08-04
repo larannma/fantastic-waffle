@@ -1,0 +1,16 @@
+<main class="main">
+  <div class="login">
+    <p class="login__title">Login</p>
+    <form class="login__form">
+      <div class="login__input-wrapper">
+        {{> Input id='login' label='Login' type='text'}}
+        {{> Input id='password' label='Password' type='password'}}
+      </div>
+      <div class="login__footer">
+        {{> Button label='Sign in' class='login__sign-in-button' type='submit'}}
+        {{> Link title='Dont have an account? create' class='login__register-link'}}
+      </div>
+    </div>
+  </div>
+  {{> routes}}
+</main>
