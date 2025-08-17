@@ -1,3 +1,3 @@
-import './notFoundPage.scss'
+import './notFoundPage.scss';
 
-export { default as notFoundPage } from './notFoundPage.hbs?raw'
+export { default as notFoundPage } from './notFoundPage.hbs?raw';

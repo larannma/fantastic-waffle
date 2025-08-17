@@ -1,3 +1,3 @@
-import './routes.scss'
+import './routes.scss';
 
-export { default as routes } from './routes.hbs?raw'
+export { default as routes } from './routes.hbs?raw';

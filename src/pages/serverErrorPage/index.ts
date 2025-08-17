@@ -1,3 +1,3 @@
-import './serverErrorPage.scss'
+import './serverErrorPage.scss';
 
-export { default as serverErrorPage } from './serverErrorPage.hbs?raw'
+export { default as serverErrorPage } from './serverErrorPage.hbs?raw';
