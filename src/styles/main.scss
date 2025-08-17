@@ -1,4 +1,15 @@
 @use './variables.scss' as *;
+@use '../pages/loginPage/loginPage.scss';
+@use '../pages/notFoundPage/notFoundPage.scss';
+@use '../pages/chatsPage/chatsPage.scss';
+@use '../pages/profilePage/profilePage.scss';
+@use '../pages/registrationPage/registerPage.scss';
+@use '../pages/serverErrorPage/serverErrorPage.scss';
+
+@use '../components/Button/button.scss';
+@use '../components/Input/input.scss';
+@use '../components/Link/link.scss';
+@use '../components/routes/routes.scss';
 
 #app{
   width: 100%;

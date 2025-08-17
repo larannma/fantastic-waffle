@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars';
+import Handlebars from 'handlebars/runtime';
 
 // helpers
 Handlebars.registerHelper('array', function () {
@@ -6,16 +6,18 @@ Handlebars.registerHelper('array', function () {
 });
 
 // partials
-import { Button } from './components/Button';
-import { Input } from './components/Input';
-import { Link } from './components/Link';
-import { routes } from './components/routes';
-import { chatsPage } from './pages/chatsPage';
-import { loginPage } from './pages/loginnPage';
-import { notFoundPage } from './pages/notFoundPage';
-import { profilePage } from './pages/profilePage';
-import { registerPage } from './pages/registrationPage';
-import { serverErrorPage } from './pages/serverErrorPage';
+import Button from './components/Button/button.hbs';
+import Input from './components/Input/input.hbs';
+import Link from './components/Link/link.hbs';
+import routes from './components/routes/routes.hbs';
+
+// pages
+import chatsPage from './pages/chatsPage/chatsPage.hbs';
+import loginPage from './pages/loginPage/loginPage.hbs';
+import notFoundPage from './pages/notFoundPage/notFoundPage.hbs';
+import profilePage from './pages/profilePage/profilePage.hbs';
+import registerPage from './pages/registrationPage/registerPage.hbs';
+import serverErrorPage from './pages/serverErrorPage/serverErrorPage.hbs';
 
 Handlebars.registerPartial('Link', Link);
 Handlebars.registerPartial('Button', Button);
@@ -48,31 +50,24 @@ export default class App {
   }
 
   render() {
-    let template;
     switch (this.state.currentPage){
       case 'chats':
-        template = Handlebars.compile(chatsPage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = chatsPage({});
         break;
       case 'profile':
-        template = Handlebars.compile(profilePage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = profilePage({});
         break;
       case 'login':
-        template = Handlebars.compile(loginPage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = loginPage({});
         break;
       case 'register':
-        template = Handlebars.compile(registerPage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = registerPage({});
         break;
       case 'server_error':
-        template = Handlebars.compile(serverErrorPage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = serverErrorPage({});
         break;
       case 'not_found_error':
-        template = Handlebars.compile(notFoundPage);
-        this.appContainer!.innerHTML = template({});
+        this.appContainer!.innerHTML = notFoundPage({});
         break;
     }
     this.attachEventListeners();
