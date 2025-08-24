@@ -5,22 +5,26 @@ Handlebars.registerHelper('array', function () {
   return new Array(arguments[0]).fill(0).map((_, index) => index);
 });
 
-// partials
+// components
 import { Button } from './components/Button/Button';
-import Input from './components/Input/input.hbs';
-import Link from './components/Link/link.hbs';
-import routes from './components/routes/routes.hbs';
+import { Input } from './components/Input/Input';
+import { Link } from './components/Link/Link';
+import { Routes } from './components/routes/Routes';
 
 // pages
-import chatsPage from './pages/chatsPage/chatsPage.hbs';
 import { LoginPage } from './pages/loginPage/LoginPage';
+import { RegisterPage } from './pages/registrationPage/RegisterPage';
+import { ChatsPage } from './pages/chatsPage/ChatsPage';
+import { ProfilePage } from './pages/profilePage/ProfilePage';
+import { NotFoundPage } from './pages/notFoundPage/NotFoundPage';
+import { ServerErrorPage } from './pages/serverErrorPage/ServerErrorPage';
 
-import notFoundPage from './pages/notFoundPage/notFoundPage.hbs';
-import profilePage from './pages/profilePage/profilePage.hbs';
-import registerPage from './pages/registrationPage/registerPage.hbs';
-import serverErrorPage from './pages/serverErrorPage/serverErrorPage.hbs';
-
-Handlebars.registerPartial('Link', Link);
+Handlebars.registerPartial('Link', (context) => {
+  const link = new Link({
+    ...context,
+  });
+  return link.render();
+});
 
 Handlebars.registerPartial('Button', (context) => {
   const btn = new Button({
@@ -29,175 +33,122 @@ Handlebars.registerPartial('Button', (context) => {
   return btn.render();
 });
 
-Handlebars.registerPartial('Input', Input);
-Handlebars.registerPartial('routes', routes);
+Handlebars.registerPartial('Input', (context) => {
+  const input = new Input({
+    ...context,
+  });
+  return input.render();
+});
 
-const loginPage = new LoginPage();
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const pages = {
-  0: 'login',
-  1: 'register',
-  2: 'chats',
-  3: 'profile',
-  4: 'server_error',
-  5: 'not_found_error'
-} as const;
-
-type Page = typeof pages[keyof typeof pages];
+type Page = 'login' | 'register' | 'chats' | 'profile' | 'server_error' | 'not_found_error';
 
 export default class App {
-  state: {
+  private state: {
     currentPage: Page
   };
-  appContainer: HTMLElement | null;
+  private appContainer: HTMLElement | null;
+  private currentPageInstance: any = null;
+  private routesComponent: Routes;
 
   constructor(){
     this.state = {
       currentPage: 'login'
     };
     this.appContainer = document.getElementById('app');
+    this.routesComponent = new Routes();
   }
 
-  render() {
-    switch (this.state.currentPage){
-      case 'chats':
-        this.appContainer!.innerHTML = chatsPage({});
-        break;
-      case 'profile':
-        this.appContainer!.innerHTML = profilePage({});
-        break;
-      case 'login':
-        this.appContainer!.innerHTML = loginPage.render();
-        break;
-      case 'register':
-        this.appContainer!.innerHTML = registerPage({});
-        break;
-      case 'server_error':
-        this.appContainer!.innerHTML = serverErrorPage({});
-        break;
-      case 'not_found_error':
-        this.appContainer!.innerHTML = notFoundPage({});
-        break;
-    }
+  init() {
+    this.render();
     this.attachEventListeners();
     this.registerRoutes();
+    this.setupGlobalNavigation();
   }
 
-  attachEventListeners() {
-    switch (this.state.currentPage) {
-      case 'login': {
-        this.appContainer!.innerHTML = '';
-        const loginPage = new LoginPage();
-        this.appContainer!.appendChild(loginPage.getContent());
-        break;
-      }
-      
-      case 'register': {
-        const signInButton = document.querySelector('.register__register-button');
-        signInButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'login';
-          this.render();
-        });
-  
-        const goToRegisterButton = document.querySelector('.register__sign-in-link');
-        goToRegisterButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'login';
-          this.render();
-        });
-        break;
-      }
-  
-      case 'not_found_error': {
-        const signInButton = document.querySelector('.notFoundPage__back-to-chats');
-        signInButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'chats';
-          this.render();
-        });
-        break;
-      }
-  
-      case 'server_error': {
-        const signInButton = document.querySelector('.serverError__back-to-chats');
-        signInButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'chats';
-          this.render();
-        });
-        break;
-      }
-  
-      case 'chats': {
-        const profileLink = document.querySelector('.chats__profile-link');
-        profileLink?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'profile';
-          this.render();
-        });
-  
-        const sendMessage = document.querySelector('.chat__send-message-button');
-        sendMessage?.addEventListener('click', (e) => {
-          e.preventDefault();
-        });
-        break;
-      }
-  
-      case 'profile': {
-        const backButton = document.querySelector('.profile__back-to-chats');
-        backButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'chats';
-          this.render();
-        });
-  
-        const saveChanges = document.querySelector('.profile__save-btn');
-        saveChanges?.addEventListener('click', (e) => {
-          e.preventDefault();
-        });
-        break;
-      }
-  
+  private render() {
+    if (!this.appContainer) return;
+
+    // Clean up previous page instance
+    if (this.currentPageInstance) {
+      this.currentPageInstance.hide();
+    }
+
+    // Create new page instance
+    this.currentPageInstance = this.createPageInstance(this.state.currentPage);
+    
+    // Clear container and append new page and routes
+    this.appContainer.innerHTML = '';
+    this.appContainer.appendChild(this.currentPageInstance.getContent());
+    this.appContainer.appendChild(this.routesComponent.getContent());
+  }
+
+  private createPageInstance(page: Page) {
+    switch (page) {
+      case 'login':
+        return new LoginPage();
+      case 'register':
+        return new RegisterPage();
+      case 'chats':
+        return new ChatsPage();
+      case 'profile':
+        return new ProfilePage();
+      case 'not_found_error':
+        return new NotFoundPage();
+      case 'server_error':
+        return new ServerErrorPage();
       default:
-        break;
+        return new LoginPage();
     }
   }
 
-  registerRoutes(){
+  private attachEventListeners() {
+
+  }
+
+  private setupGlobalNavigation() {
+    document.addEventListener('navigate', (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const { page } = customEvent.detail;
+      if (page && this.state.currentPage !== page) {
+        this.state.currentPage = page;
+        this.render();
+      }
+    });
+  }
+
+  private registerRoutes(){
     const notFoundRoute = document.querySelector('.routes__no-found');
-    notFoundRoute!.addEventListener('click', () => {
+    notFoundRoute?.addEventListener('click', () => {
       this.state.currentPage = 'not_found_error';
       this.render();
     });
 
     const serverErrorRoute = document.querySelector('.routes__server-error');
-    serverErrorRoute!.addEventListener('click', () => {
+    serverErrorRoute?.addEventListener('click', () => {
       this.state.currentPage = 'server_error';
       this.render();
     });
 
     const profileRoute = document.querySelector('.routes__profile');
-    profileRoute!.addEventListener('click', () => {
+    profileRoute?.addEventListener('click', () => {
       this.state.currentPage = 'profile';
       this.render();
     });
 
     const chatsRoute = document.querySelector('.routes__chats');
-    chatsRoute!.addEventListener('click', () => {
+    chatsRoute?.addEventListener('click', () => {
       this.state.currentPage = 'chats';
       this.render();
     });
 
     const registerRoute = document.querySelector('.routes__register');
-    registerRoute!.addEventListener('click', () => {
+    registerRoute?.addEventListener('click', () => {
       this.state.currentPage = 'register';
       this.render();
     });
 
     const loginRoute = document.querySelector('.routes__login');
-    loginRoute!.addEventListener('click', () => {
+    loginRoute?.addEventListener('click', () => {
       this.state.currentPage = 'login';
       this.render();
     });

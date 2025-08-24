@@ -4,13 +4,15 @@ import "./loginPage.scss";
 import { ValidationForm } from "../../services/ValidationForm";
 
 export class LoginPage extends Component {
-  private validator: ValidationForm | null = null;
 
   constructor() {
     super("main", {
       class: "main",
       ".login__form": {
         submit: (e: Event) => this.onSubmit(e),
+      },
+      ".login__register-link": {
+        click: (e: Event) => this.onRegisterClick(e),
       },
     });
   }
@@ -24,7 +26,7 @@ export class LoginPage extends Component {
     if (!form) return;
 
     // чтобы работало сразу на блюре
-    this.validator = new ValidationForm(form);
+    new ValidationForm(form);
   }
 
   private onSubmit(e: Event) {
@@ -37,9 +39,18 @@ export class LoginPage extends Component {
 
     if (validator.validateForm()) {
       const values = validator.getValues();
-      // console.log("✅ Form valid, collected values:", values);
+      console.log("✅ Form valid, collected values:", values);
     } else {
-      // console.log("❌ Form invalid");
+      console.log("❌ Form invalid");
     }
+  }
+
+  private onRegisterClick(e: Event) {
+    e.preventDefault();
+    // Emit custom event for navigation
+    this.getContent().dispatchEvent(new CustomEvent('navigate', {
+      detail: { page: 'register' },
+      bubbles: true
+    }));
   }
 }
