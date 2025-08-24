@@ -1,6 +1,6 @@
 @use '../../styles/variables.scss' as *;
 
-.routes{
+.routes__list{
   position: fixed;
   top: 20px;
   left: 50%;
@@ -10,6 +10,7 @@
   padding: 20px;
   background-color: rgba($color: #477cd8, $alpha: 0.2);
   border-radius: 5px;
+  list-style-type: none;
 }
 
 .route{
