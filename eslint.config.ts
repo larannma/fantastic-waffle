@@ -15,7 +15,10 @@ export default defineConfig([
     },
     languageOptions: {
       parser: tsParser,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
     },
     extends: ["js/recommended"],
     ignores: [

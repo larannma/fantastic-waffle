@@ -6,23 +6,33 @@ Handlebars.registerHelper('array', function () {
 });
 
 // partials
-import Button from './components/Button/button.hbs';
+import { Button } from './components/Button/Button';
 import Input from './components/Input/input.hbs';
 import Link from './components/Link/link.hbs';
 import routes from './components/routes/routes.hbs';
 
 // pages
 import chatsPage from './pages/chatsPage/chatsPage.hbs';
-import loginPage from './pages/loginPage/loginPage.hbs';
+import { LoginPage } from './pages/loginPage/LoginPage';
+
 import notFoundPage from './pages/notFoundPage/notFoundPage.hbs';
 import profilePage from './pages/profilePage/profilePage.hbs';
 import registerPage from './pages/registrationPage/registerPage.hbs';
 import serverErrorPage from './pages/serverErrorPage/serverErrorPage.hbs';
 
 Handlebars.registerPartial('Link', Link);
-Handlebars.registerPartial('Button', Button);
+
+Handlebars.registerPartial('Button', (context) => {
+  const btn = new Button({
+    ...context,
+  });
+  return btn.render();
+});
+
 Handlebars.registerPartial('Input', Input);
 Handlebars.registerPartial('routes', routes);
+
+const loginPage = new LoginPage();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const pages = {
@@ -58,7 +68,7 @@ export default class App {
         this.appContainer!.innerHTML = profilePage({});
         break;
       case 'login':
-        this.appContainer!.innerHTML = loginPage({});
+        this.appContainer!.innerHTML = loginPage.render();
         break;
       case 'register':
         this.appContainer!.innerHTML = registerPage({});
@@ -77,22 +87,12 @@ export default class App {
   attachEventListeners() {
     switch (this.state.currentPage) {
       case 'login': {
-        const signInButton = document.querySelector('.login__sign-in-button');
-        signInButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'chats';
-          this.render();
-        });
-  
-        const goToRegisterButton = document.querySelector('.login__register-link');
-        goToRegisterButton?.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.state.currentPage = 'register';
-          this.render();
-        });
+        this.appContainer!.innerHTML = '';
+        const loginPage = new LoginPage();
+        this.appContainer!.appendChild(loginPage.getContent());
         break;
       }
-  
+      
       case 'register': {
         const signInButton = document.querySelector('.register__register-button');
         signInButton?.addEventListener('click', (e) => {
