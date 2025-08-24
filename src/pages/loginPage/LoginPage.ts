@@ -1,17 +1,18 @@
-import { Component } from "../../services/Component";
-import template from "./loginPage.hbs";
-import "./loginPage.scss";
-import { ValidationForm } from "../../services/ValidationForm";
+import { Component } from '../../services/Component';
+import template from './loginPage.hbs';
+import './loginPage.scss';
+
+import { ValidationForm } from '../../services/ValidationForm';
 
 export class LoginPage extends Component {
 
   constructor() {
-    super("main", {
-      class: "main",
-      ".login__form": {
+    super('main', {
+      class: 'main',
+      '.login__form': {
         submit: (e: Event) => this.onSubmit(e),
       },
-      ".login__register-link": {
+      '.login__register-link': {
         click: (e: Event) => this.onRegisterClick(e),
       },
     });
@@ -22,7 +23,7 @@ export class LoginPage extends Component {
   }
 
   componentDidMount() {
-    const form = this.getContent().querySelector<HTMLFormElement>(".login__form");
+    const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
     if (!form) return;
 
     // чтобы работало сразу на блюре
@@ -32,16 +33,16 @@ export class LoginPage extends Component {
   private onSubmit(e: Event) {
     e.preventDefault();
 
-    const form = this.getContent().querySelector<HTMLFormElement>(".login__form");
+    const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
     if (!form) return;
 
     const validator = new ValidationForm(form);
 
     if (validator.validateForm()) {
       const values = validator.getValues();
-      console.log("✅ Form valid, collected values:", values);
+      console.log('✅ Form valid, collected values:', values);
     } else {
-      console.log("❌ Form invalid");
+      console.log('❌ Form invalid');
     }
   }
 
