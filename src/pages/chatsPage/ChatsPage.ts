@@ -1,6 +1,6 @@
-import { Component } from '../../services/Component';
-import template from './chatsPage.hbs';
-import './chatsPage.scss';
+import { Component } from '../../services/Component'
+import template from './chatsPage.hbs'
+import './chatsPage.scss'
 
 export class ChatsPage extends Component {
   constructor() {
@@ -12,29 +12,29 @@ export class ChatsPage extends Component {
       '.chat__send-message-button': {
         click: (e: Event) => this.onSendMessage(e),
       },
-    });
+    })
   }
 
   render() {
-    return template(this.props);
+    return template(this.props)
   }
 
   private onProfileClick(e: Event) {
-    e.preventDefault();
+    e.preventDefault()
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {
       detail: { page: 'profile' },
       bubbles: true
-    }));
+    }))
   }
 
   private onSendMessage(e: Event) {
-    e.preventDefault();
+    e.preventDefault()
     // Handle send message logic
-    const input = this.getContent().querySelector('.chat__send-message-input') as HTMLInputElement;
+    const input = this.getContent().querySelector('.chat__send-message-input') as HTMLInputElement
     if (input && input.value.trim()) {
       // Add message sending logic here
-      input.value = '';
+      input.value = ''
     }
   }
 }

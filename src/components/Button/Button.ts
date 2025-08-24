@@ -1,20 +1,20 @@
-import { Component } from "../../services/Component";
-import template from "./button.hbs";
+import { Component } from '../../services/Component'
+import template from './button.hbs'
 
 interface ButtonProps {
   label: string;
   type?: string;
   events?: {
-    click?: (e: Event) => void;
+    click?: () => void;
   };
 }
 
 export class Button extends Component {
   constructor(props: ButtonProps) {
-    super("button", props);
+    super('button', props)
   }
 
   render(): string {
-    return template(this.props);
+    return template(this.props)
   }
 }

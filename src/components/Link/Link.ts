@@ -1,6 +1,6 @@
-import { Component } from '../../services/Component';
-import template from './link.hbs';
-import './link.scss';
+import { Component } from '../../services/Component'
+import template from './link.hbs'
+import './link.scss'
 
 interface LinkProps {
   title: string;
@@ -12,10 +12,10 @@ export class Link extends Component {
     super('a', {
       class: `link ${props.class || ''}`,
       ...props,
-    });
+    })
   }
 
   render() {
-    return template(this.props);
+    return template(this.props)
   }
 }
