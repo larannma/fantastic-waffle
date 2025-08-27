@@ -1,6 +1,6 @@
-import { Component } from '../../services/Component'
-import template from './input.hbs'
-import './input.scss'
+import { Component } from '../../services/Component';
+import template from './input.hbs';
+import './input.scss';
 
 interface InputProps {
   id: string;
@@ -15,10 +15,10 @@ export class Input extends Component {
     super('div', {
       class: 'input',
       ...props,
-    })
+    });
   }
 
   render() {
-    return template(this.props)
+    return template(this.props);
   }
 }

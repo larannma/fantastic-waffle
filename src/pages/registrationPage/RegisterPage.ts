@@ -1,7 +1,7 @@
-import { Component } from '../../services/Component'
-import { ValidationForm } from '../../services/ValidationForm'
-import template from './registerPage.hbs'
-import './registerPage.scss'
+import { Component } from '../../services/Component';
+import { ValidationForm } from '../../services/ValidationForm';
+import template from './registerPage.hbs';
+import './registerPage.scss';
 
 export class RegisterPage extends Component {
 
@@ -17,51 +17,51 @@ export class RegisterPage extends Component {
       '.register__sign-in-link': {
         click: (e: Event) => this.onSignInClick(e),
       },
-    })
+    });
   }
 
   render() {
-    return template(this.props)
+    return template(this.props);
   }
 
   componentDidMount() {
-    const form = this.getContent().querySelector<HTMLFormElement>('.register__form')
-    if (!form) return
+    const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
+    if (!form) return;
 
-    new ValidationForm(form)
+    new ValidationForm(form);
   }
 
   private onSubmit(e: Event) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const form = this.getContent().querySelector<HTMLFormElement>('.register__form')
-    if (!form) return
+    const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
+    if (!form) return;
 
-    const validator = new ValidationForm(form)
+    const validator = new ValidationForm(form);
 
     if (validator.validateForm()) {
-      const values = validator.getValues()
-      console.log('✅ Registration form valid, collected values:', values)
+      const values = validator.getValues();
+      console.log('✅ Registration form valid, collected values:', values);
     } else {
-      console.log('❌ Registration form invalid')
+      console.log('❌ Registration form invalid');
     }
   }
 
   private onRegisterClick(e: Event) {
-    e.preventDefault()
+    e.preventDefault();
     // Trigger form submission
-    const form = this.getContent().querySelector<HTMLFormElement>('.register__form')
+    const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
     if (form) {
-      form.dispatchEvent(new Event('submit', { bubbles: true }))
+      form.dispatchEvent(new Event('submit', { bubbles: true }));
     }
   }
 
   private onSignInClick(e: Event) {
-    e.preventDefault()
+    e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {
       detail: { page: 'login' },
       bubbles: true
-    }))
+    }));
   }
 }

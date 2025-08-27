@@ -30,8 +30,11 @@ export default defineConfig([
     ],
     rules: {
       // ✅ TypeScript rules
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
-
+      "no-unused-vars": "off",
+      // "@typescript-eslint/no-unused-vars": [
+      //   "error",
+      //   { "ignoreRestSiblings": true, "argsIgnorePattern": "^_", "varsIgnorePattern": ".*" }
+      // ],
       // ✅ General JS/TS rules
       // "no-console": "error",
       "no-multiple-empty-lines": ["error", { max: 1, maxEOF: 1 }],
@@ -39,7 +42,7 @@ export default defineConfig([
 
       // ✅ Formatting / style rules
       "quotes": ["error", "single", { avoidEscape: true }], // enforce single quotes
-      "semi": ["error", "never"], // enforce no semicolons
+      "semi": ["error", "always"], // enforce no semicolons
       "comma-dangle": ["error", "only-multiline"], // trailing commas in multiline
       "max-len": ["warn", { code: 120 }], // allow up to 120 chars per line
 

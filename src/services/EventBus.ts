@@ -1,33 +1,33 @@
 export class EventBus {
-  private events:  Record<string, (() => void)[]>
+  private events:  Record<string, (() => void)[]>;
   
   constructor() {
-    this.events = {}
+    this.events = {};
   }
 
   _hasEvent(eventName: string){
-    return eventName in this.events
+    return eventName in this.events;
   }
 
   on(eventName: string, callback: () => void) {
     if (!this._hasEvent(eventName)){
-      this.events[eventName] = []
+      this.events[eventName] = [];
     }
-    this.events[eventName].push(callback)
+    this.events[eventName].push(callback);
   };
 
   off(eventName: string, callback: () => void){
     if (!this._hasEvent(eventName)){
-      return
+      return;
     }
-    this.events[eventName].filter((fn) => fn !== callback)
+    this.events[eventName].filter((fn) => fn !== callback);
   }
 
   emit(eventName: string) {
     if(this._hasEvent(eventName)){
       this.events[eventName].forEach((fn) => {
-        fn()
-      })
+        fn();
+      });
     }
   }
 }
