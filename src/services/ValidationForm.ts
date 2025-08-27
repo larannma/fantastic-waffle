@@ -85,7 +85,7 @@ export class ValidationForm {
 
   // --- regex rules ---
   private validateFirstName(value: string): string | null {
-    return /^[A-ZА-Я][a-zа-яA-ZА-Я-]*$/.test(value) ? null : 'Invalid name';
+    return /^[A-ZА-ЯЁ][a-zа-яёA-ZА-ЯЁ-]*$/.test(value) ? null : 'Invalid name';
   }
   private validateLogin(value: string): string | null {
     return /^(?!\d+$)[a-zA-Z0-9_-]{3,20}$/.test(value) ? null : 'Invalid login';
@@ -94,7 +94,7 @@ export class ValidationForm {
     return /^[a-zA-Z0-9._-]+@[a-zA-Z]+\.[a-zA-Z]+$/.test(value) ? null : 'Invalid email';
   }
   private validatePassword(value: string): string | null {
-    return /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,40}$/.test(value) ? null : 'Invalid password';
+    return /^(?=.*[A-Z])(?=.*\d).{8,40}$/.test(value) ? null : 'Invalid password';
   }
   private validatePhone(value: string): string | null {
     return /^\+?\d{10,15}$/.test(value) ? null : 'Invalid phone';

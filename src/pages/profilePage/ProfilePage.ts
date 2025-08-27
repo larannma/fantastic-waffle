@@ -3,7 +3,17 @@ import { ValidationForm } from '../../services/ValidationForm';
 import template from './profilePage.hbs';
 import './profilePage.scss';
 
-export class ProfilePage extends Component {
+interface ProfilePageProps {
+  class: string;
+  '.profile__back-to-chats': {
+    click: (e: MouseEvent) => void;
+  };
+  '.profile__save-btn': {
+    click: (e: MouseEvent) => void;
+  };
+}
+
+export class ProfilePage extends Component<ProfilePageProps> {
   constructor() {
     super('main', {
       class: 'main',
@@ -28,7 +38,7 @@ export class ProfilePage extends Component {
     new ValidationForm(form);
   }
 
-  private onBackToChats(e: Event) {
+  private onBackToChats(e: MouseEvent) {
     e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {
@@ -37,7 +47,7 @@ export class ProfilePage extends Component {
     }));
   }
 
-  private onSaveChanges(e: Event) {
+  private onSaveChanges(e: MouseEvent) {
     e.preventDefault();
     // Handle save changes logic with validation
     const form = this.getContent().querySelector<HTMLFormElement>('.profile__form');

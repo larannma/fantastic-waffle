@@ -3,7 +3,17 @@ import { ValidationForm } from '../../services/ValidationForm';
 import template from './loginPage.hbs';
 import './loginPage.scss';
 
-export class LoginPage extends Component {
+interface LoginPageProps {
+  class: string;
+  '.login__form': {
+    submit: (e: SubmitEvent) => void;
+  };
+  '.login__register-link': {
+    click: (e: MouseEvent) => void;
+  };
+}
+
+export class LoginPage extends Component<LoginPageProps> {
 
   constructor() {
     super('main', {
@@ -29,7 +39,7 @@ export class LoginPage extends Component {
     new ValidationForm(form);
   }
 
-  private onSubmit(e: Event) {
+  private onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
@@ -45,7 +55,7 @@ export class LoginPage extends Component {
     }
   }
 
-  private onRegisterClick(e: Event) {
+  private onRegisterClick(e: MouseEvent) {
     e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {

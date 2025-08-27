@@ -1,29 +1,59 @@
 enum METHOD {
-        GET = 'GET',
-        POST = 'POST',
-        PUT = 'PUT',
-        PATCH = 'PATCH',
-        DELETE = 'DELETE'
-};
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE'
+}
 
-type Options = {
-    method: METHOD;
-    data?: any;
-};
+interface RequestOptions {
+  method: METHOD;
+  data?: string | FormData | Document | ArrayBuffer | Blob | ReadableStream<Uint8Array>;
+  headers?: Record<string, string>;
+  timeout?: number;
+}
 
-type OptionsWithoutMethod = Omit<Options, 'method'>;
+type RequestOptionsWithoutMethod = Omit<RequestOptions, 'method'>;
 
 export class HTTPTransport {
-  get(url: string, options: OptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, {...options, method: METHOD.GET});
-  };
+  get(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    return this.request(url, { ...options, method: METHOD.GET });
+  }
 
-  request(url: string, options: Options = { method: METHOD.GET }): Promise<XMLHttpRequest> {
-    const {method, data} = options;
+  post(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    return this.request(url, { ...options, method: METHOD.POST });
+  }
+
+  put(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    return this.request(url, { ...options, method: METHOD.PUT });
+  }
+
+  patch(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    return this.request(url, { ...options, method: METHOD.PATCH });
+  }
+
+  delete(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
+    return this.request(url, { ...options, method: METHOD.DELETE });
+  }
+
+  request(url: string, options: RequestOptions = { method: METHOD.GET }): Promise<XMLHttpRequest> {
+    const { method, data, headers, timeout } = options;
 
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
+      
+      // Set headers if provided
+      if (headers) {
+        Object.entries(headers).forEach(([key, value]) => {
+          xhr.setRequestHeader(key, value);
+        });
+      }
+
+      // Set timeout if provided
+      if (timeout) {
+        xhr.timeout = timeout;
+      }
       
       xhr.onload = function() {
         resolve(xhr);
@@ -39,5 +69,5 @@ export class HTTPTransport {
         xhr.send(data);
       }
     });
-  };
+  }
 }

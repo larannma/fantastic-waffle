@@ -3,7 +3,20 @@ import { ValidationForm } from '../../services/ValidationForm';
 import template from './registerPage.hbs';
 import './registerPage.scss';
 
-export class RegisterPage extends Component {
+interface RegisterPageProps {
+  class: string;
+  '.register__form': {
+    submit: (e: SubmitEvent) => void;
+  };
+  '.register__register-button': {
+    click: (e: MouseEvent) => void;
+  };
+  '.register__sign-in-link': {
+    click: (e: MouseEvent) => void;
+  };
+}
+
+export class RegisterPage extends Component<RegisterPageProps> {
 
   constructor() {
     super('main', {
@@ -31,7 +44,7 @@ export class RegisterPage extends Component {
     new ValidationForm(form);
   }
 
-  private onSubmit(e: Event) {
+  private onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
@@ -47,7 +60,7 @@ export class RegisterPage extends Component {
     }
   }
 
-  private onRegisterClick(e: Event) {
+  private onRegisterClick(e: MouseEvent) {
     e.preventDefault();
     // Trigger form submission
     const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
@@ -56,7 +69,7 @@ export class RegisterPage extends Component {
     }
   }
 
-  private onSignInClick(e: Event) {
+  private onSignInClick(e: MouseEvent) {
     e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {

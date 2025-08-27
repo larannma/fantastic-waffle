@@ -13,7 +13,11 @@ interface IMeta {
   props: Record<string, unknown>;
 }
 
-export class Component {
+interface ComponentProps {
+  [key: string]: unknown;
+}
+
+export class Component<T extends ComponentProps = ComponentProps> {
   private static EVENTS: IEvents = {
     INIT: 'init',
     FLOW_CDM: 'flow:component-did-mount',
@@ -24,9 +28,9 @@ export class Component {
   private _element: HTMLElement | null = null;
   private _meta: IMeta;
   private _eventBus: () => EventBus;
-  protected props: Record<string, unknown>;
+  protected props: T;
 
-  constructor(tagName = 'div', props = {}) {
+  constructor(tagName = 'div', props: T = {} as T) {
     const eventBus = new EventBus();
 
     this._meta = {
@@ -69,7 +73,7 @@ export class Component {
     this._eventBus().emit(Component.EVENTS.FLOW_CDM);
   }
 
-  private _componentDidUpdate = (oldProps: unknown, newProps: unknown) => {
+  private _componentDidUpdate = (oldProps: T, newProps: T) => {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) {
       this._eventBus().emit(Component.EVENTS.FLOW_CDU);
@@ -78,7 +82,7 @@ export class Component {
   };
 
   // Может переопределяться в наследниках
-  componentDidUpdate(oldProps: unknown, newProps: unknown) {
+  componentDidUpdate(oldProps: T, newProps: T): boolean {
     const keys = Object.keys(newProps);
 
     for (let key of keys) {
@@ -89,7 +93,7 @@ export class Component {
     return false;
   }
 
-  setProps = (nextProps: Record<string, unknown>) => {
+  setProps = (nextProps: Partial<T>) => {
     if (!nextProps) {
       return;
     }
@@ -120,20 +124,20 @@ export class Component {
     return this._element!;
   }
 
-  private _makePropsProxy(props: Record<string, unknown>) {
+  private _makePropsProxy(props: T): T {
     const self = this;
 
-    return new Proxy(props, {
+    return new Proxy(props as Record<string, unknown>, {
       set(target, prop: string, value) {
         const oldProps = { ...target };
         target[prop] = value;
-        self._componentDidUpdate(oldProps, target);
+        self._componentDidUpdate(oldProps as T, target as T);
         return true;
       },
       deleteProperty() {
         throw new Error('Нет доступа');
       },
-    });
+    }) as T;
   }
 
   private _createDocumentElement(tagName: string) {
