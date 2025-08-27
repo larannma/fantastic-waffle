@@ -42,12 +42,14 @@ Handlebars.registerPartial('Input', (context) => {
 
 type Page = 'login' | 'register' | 'chats' | 'profile' | 'server_error' | 'not_found_error';
 
+type PageComponent = LoginPage | RegisterPage | ChatsPage | ProfilePage | NotFoundPage | ServerErrorPage;
+
 export default class App {
   private state: {
     currentPage: Page
   };
   private appContainer: HTMLElement | null;
-  private currentPageInstance: unknown = null;
+  private currentPageInstance: PageComponent | null = null;
   private routesComponent: Routes;
 
   constructor(){
@@ -78,11 +80,13 @@ export default class App {
     
     // Clear container and append new page and routes
     this.appContainer.innerHTML = '';
-    this.appContainer.appendChild(this.currentPageInstance.getContent());
+    if (this.currentPageInstance) {
+      this.appContainer.appendChild(this.currentPageInstance.getContent());
+    }
     this.appContainer.appendChild(this.routesComponent.getContent());
   }
 
-  private createPageInstance(page: Page) {
+  private createPageInstance(page: Page): PageComponent {
     switch (page) {
       case 'login':
         return new LoginPage();

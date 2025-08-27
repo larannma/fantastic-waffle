@@ -13,7 +13,7 @@ interface IMeta {
   props: Record<string, unknown>;
 }
 
-interface ComponentProps {
+export interface ComponentProps {
   [key: string]: unknown;
 }
 

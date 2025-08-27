@@ -7,9 +7,10 @@ interface ButtonProps {
   events?: {
     click?: () => void;
   };
+  [key: string]: unknown;
 }
 
-export class Button extends Component {
+export class Button extends Component<ButtonProps> {
   constructor(props: ButtonProps) {
     super('button', props);
   }

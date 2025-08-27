@@ -11,6 +11,7 @@ interface ProfilePageProps {
   '.profile__save-btn': {
     click: (e: MouseEvent) => void;
   };
+  [key: string]: unknown;
 }
 
 export class ProfilePage extends Component<ProfilePageProps> {
@@ -18,10 +19,10 @@ export class ProfilePage extends Component<ProfilePageProps> {
     super('main', {
       class: 'main',
       '.profile__back-to-chats': {
-        click: (e: Event) => this.onBackToChats(e),
+        click: (e: MouseEvent) => this.onBackToChats(e),
       },
       '.profile__save-btn': {
-        click: (e: Event) => this.onSaveChanges(e),
+        click: (e: MouseEvent) => this.onSaveChanges(e),
       },
     });
   }

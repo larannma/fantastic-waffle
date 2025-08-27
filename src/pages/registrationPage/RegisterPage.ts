@@ -14,6 +14,7 @@ interface RegisterPageProps {
   '.register__sign-in-link': {
     click: (e: MouseEvent) => void;
   };
+  [key: string]: unknown;
 }
 
 export class RegisterPage extends Component<RegisterPageProps> {
@@ -22,13 +23,13 @@ export class RegisterPage extends Component<RegisterPageProps> {
     super('main', {
       class: 'main',
       '.register__form': {
-        submit: (e: Event) => this.onSubmit(e),
+        submit: (e: SubmitEvent) => this.onSubmit(e),
       },
       '.register__register-button': {
-        click: (e: Event) => this.onRegisterClick(e),
+        click: (e: MouseEvent) => this.onRegisterClick(e),
       },
       '.register__sign-in-link': {
-        click: (e: Event) => this.onSignInClick(e),
+        click: (e: MouseEvent) => this.onSignInClick(e),
       },
     });
   }

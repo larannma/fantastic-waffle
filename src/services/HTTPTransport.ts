@@ -8,7 +8,7 @@ enum METHOD {
 
 interface RequestOptions {
   method: METHOD;
-  data?: string | FormData | Document | ArrayBuffer | Blob | ReadableStream<Uint8Array>;
+  data?: string | FormData | Document | ArrayBuffer | Blob;
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -28,10 +28,6 @@ export class HTTPTransport {
     return this.request(url, { ...options, method: METHOD.PUT });
   }
 
-  patch(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
-    return this.request(url, { ...options, method: METHOD.PATCH });
-  }
-
   delete(url: string, options: RequestOptionsWithoutMethod = {}): Promise<XMLHttpRequest> {
     return this.request(url, { ...options, method: METHOD.DELETE });
   }
@@ -43,14 +39,12 @@ export class HTTPTransport {
       const xhr = new XMLHttpRequest();
       xhr.open(method, url);
       
-      // Set headers if provided
       if (headers) {
         Object.entries(headers).forEach(([key, value]) => {
           xhr.setRequestHeader(key, value);
         });
       }
 
-      // Set timeout if provided
       if (timeout) {
         xhr.timeout = timeout;
       }

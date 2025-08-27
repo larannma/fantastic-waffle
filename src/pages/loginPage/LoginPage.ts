@@ -11,6 +11,7 @@ interface LoginPageProps {
   '.login__register-link': {
     click: (e: MouseEvent) => void;
   };
+  [key: string]: unknown;
 }
 
 export class LoginPage extends Component<LoginPageProps> {
@@ -19,10 +20,10 @@ export class LoginPage extends Component<LoginPageProps> {
     super('main', {
       class: 'main',
       '.login__form': {
-        submit: (e: Event) => this.onSubmit(e),
+        submit: (e: SubmitEvent) => this.onSubmit(e),
       },
       '.login__register-link': {
-        click: (e: Event) => this.onRegisterClick(e),
+        click: (e: MouseEvent) => this.onRegisterClick(e),
       },
     });
   }
