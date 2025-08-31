@@ -1,4 +1,4 @@
-declare module '*.hbs?raw' {
-  const content: Template<any>;
+declare module '*.hbs' {
+  const content: Template<unknown>;
   export default content;
 }
