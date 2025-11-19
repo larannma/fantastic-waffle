@@ -1,12 +1,12 @@
-import { Component } from "../../services/Component";
-import template from "./serverErrorPage.hbs";
-import "./serverErrorPage.scss";
+import { Component } from '../../services/Component';
+import template from './serverErrorPage.hbs';
+import './serverErrorPage.scss';
 
 export class ServerErrorPage extends Component {
   constructor() {
-    super("main", {
-      class: "main",
-      ".serverError__back-to-chats": {
+    super('main', {
+      class: 'main',
+      '.serverError__back-to-chats': {
         click: (e: Event) => this.onBackToChats(e),
       },
     });

@@ -1,12 +1,12 @@
-import { Component } from "../../services/Component";
-import template from "./notFoundPage.hbs";
-import "./notFoundPage.scss";
+import { Component } from '../../services/Component';
+import template from './notFoundPage.hbs';
+import './notFoundPage.scss';
 
 export class NotFoundPage extends Component {
   constructor() {
-    super("main", {
-      class: "main",
-      ".notFoundPage__back-to-chats": {
+    super('main', {
+      class: 'main',
+      '.notFoundPage__back-to-chats': {
         click: (e: Event) => this.onBackToChats(e),
       },
     });

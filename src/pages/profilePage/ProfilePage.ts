@@ -1,17 +1,28 @@
-import { Component } from "../../services/Component";
-import template from "./profilePage.hbs";
-import "./profilePage.scss";
-import { ValidationForm } from "../../services/ValidationForm";
+import { Component } from '../../services/Component';
+import { ValidationForm } from '../../services/ValidationForm';
+import template from './profilePage.hbs';
+import './profilePage.scss';
 
-export class ProfilePage extends Component {
+interface ProfilePageProps {
+  class: string;
+  '.profile__back-to-chats': {
+    click: (e: MouseEvent) => void;
+  };
+  '.profile__save-btn': {
+    click: (e: MouseEvent) => void;
+  };
+  [key: string]: unknown;
+}
+
+export class ProfilePage extends Component<ProfilePageProps> {
   constructor() {
-    super("main", {
-      class: "main",
-      ".profile__back-to-chats": {
-        click: (e: Event) => this.onBackToChats(e),
+    super('main', {
+      class: 'main',
+      '.profile__back-to-chats': {
+        click: (e: MouseEvent) => this.onBackToChats(e),
       },
-      ".profile__save-btn": {
-        click: (e: Event) => this.onSaveChanges(e),
+      '.profile__save-btn': {
+        click: (e: MouseEvent) => this.onSaveChanges(e),
       },
     });
   }
@@ -21,14 +32,14 @@ export class ProfilePage extends Component {
   }
 
   componentDidMount() {
-    const form = this.getContent().querySelector<HTMLFormElement>(".profile__form");
+    const form = this.getContent().querySelector<HTMLFormElement>('.profile__form');
     if (!form) return;
 
     // Initialize validation for the form
     new ValidationForm(form);
   }
 
-  private onBackToChats(e: Event) {
+  private onBackToChats(e: MouseEvent) {
     e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {
@@ -37,18 +48,18 @@ export class ProfilePage extends Component {
     }));
   }
 
-  private onSaveChanges(e: Event) {
+  private onSaveChanges(e: MouseEvent) {
     e.preventDefault();
     // Handle save changes logic with validation
-    const form = this.getContent().querySelector<HTMLFormElement>(".profile__form");
+    const form = this.getContent().querySelector<HTMLFormElement>('.profile__form');
     if (form) {
       const validator = new ValidationForm(form);
       
       if (validator.validateForm()) {
         const values = validator.getValues();
-        console.log("✅ Profile form valid, collected values:", values);
+        console.log('✅ Profile form valid, collected values:', values);
       } else {
-        console.log("❌ Profile form invalid");
+        console.log('❌ Profile form invalid');
       }
     }
   }

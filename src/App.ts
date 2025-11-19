@@ -12,11 +12,11 @@ import { Link } from './components/Link/Link';
 import { Routes } from './components/routes/Routes';
 
 // pages
-import { LoginPage } from './pages/loginPage/LoginPage';
-import { RegisterPage } from './pages/registrationPage/RegisterPage';
 import { ChatsPage } from './pages/chatsPage/ChatsPage';
-import { ProfilePage } from './pages/profilePage/ProfilePage';
+import { LoginPage } from './pages/loginPage/LoginPage';
 import { NotFoundPage } from './pages/notFoundPage/NotFoundPage';
+import { ProfilePage } from './pages/profilePage/ProfilePage';
+import { RegisterPage } from './pages/registrationPage/RegisterPage';
 import { ServerErrorPage } from './pages/serverErrorPage/ServerErrorPage';
 
 Handlebars.registerPartial('Link', (context) => {
@@ -42,12 +42,14 @@ Handlebars.registerPartial('Input', (context) => {
 
 type Page = 'login' | 'register' | 'chats' | 'profile' | 'server_error' | 'not_found_error';
 
+type PageComponent = LoginPage | RegisterPage | ChatsPage | ProfilePage | NotFoundPage | ServerErrorPage;
+
 export default class App {
   private state: {
     currentPage: Page
   };
   private appContainer: HTMLElement | null;
-  private currentPageInstance: any = null;
+  private currentPageInstance: PageComponent | null = null;
   private routesComponent: Routes;
 
   constructor(){
@@ -78,11 +80,13 @@ export default class App {
     
     // Clear container and append new page and routes
     this.appContainer.innerHTML = '';
-    this.appContainer.appendChild(this.currentPageInstance.getContent());
+    if (this.currentPageInstance) {
+      this.appContainer.appendChild(this.currentPageInstance.getContent());
+    }
     this.appContainer.appendChild(this.routesComponent.getContent());
   }
 
-  private createPageInstance(page: Page) {
+  private createPageInstance(page: Page): PageComponent {
     switch (page) {
       case 'login':
         return new LoginPage();

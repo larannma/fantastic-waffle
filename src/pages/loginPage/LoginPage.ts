@@ -1,19 +1,29 @@
 import { Component } from '../../services/Component';
+import { ValidationForm } from '../../services/ValidationForm';
 import template from './loginPage.hbs';
 import './loginPage.scss';
 
-import { ValidationForm } from '../../services/ValidationForm';
+interface LoginPageProps {
+  class: string;
+  '.login__form': {
+    submit: (e: SubmitEvent) => void;
+  };
+  '.login__register-link': {
+    click: (e: MouseEvent) => void;
+  };
+  [key: string]: unknown;
+}
 
-export class LoginPage extends Component {
+export class LoginPage extends Component<LoginPageProps> {
 
   constructor() {
     super('main', {
       class: 'main',
       '.login__form': {
-        submit: (e: Event) => this.onSubmit(e),
+        submit: (e: SubmitEvent) => this.onSubmit(e),
       },
       '.login__register-link': {
-        click: (e: Event) => this.onRegisterClick(e),
+        click: (e: MouseEvent) => this.onRegisterClick(e),
       },
     });
   }
@@ -30,7 +40,7 @@ export class LoginPage extends Component {
     new ValidationForm(form);
   }
 
-  private onSubmit(e: Event) {
+  private onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
@@ -46,7 +56,7 @@ export class LoginPage extends Component {
     }
   }
 
-  private onRegisterClick(e: Event) {
+  private onRegisterClick(e: MouseEvent) {
     e.preventDefault();
     // Emit custom event for navigation
     this.getContent().dispatchEvent(new CustomEvent('navigate', {
