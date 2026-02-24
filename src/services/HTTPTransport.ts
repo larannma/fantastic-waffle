@@ -66,6 +66,7 @@ export class HTTPTransport {
       }
 
       const xhr = new XMLHttpRequest();
+      xhr.withCredentials = true;
       xhr.open(method, fullUrl);
 
       if (headers) {

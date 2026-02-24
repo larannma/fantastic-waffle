@@ -83,7 +83,6 @@ export class ValidationForm {
     return errorEl;
   }
 
-  // --- regex rules ---
   private validateFirstName(value: string): string | null {
     return /^[A-ZА-ЯЁ][a-zа-яёA-ZА-ЯЁ-]*$/.test(value) ? null : 'Invalid name';
   }
