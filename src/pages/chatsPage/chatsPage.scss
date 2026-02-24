@@ -41,10 +41,16 @@
   }
 }
 
-.chats__search-input {
-  width: calc(100% - 20px);
+.chats__search-container {
+  display: flex;
+  gap: 8px;
   margin: 10px;
   margin-bottom: 20px;
+  align-items: center;
+}
+
+.chats__search-input {
+  flex: 1;
   padding: 8px 12px;
   outline: none;
   border: none;
@@ -52,6 +58,26 @@
   text-align: center;
   border-radius: $border-radius-xs;
   box-sizing: border-box;
+}
+
+.chats__add-chat-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: $accent-color;
+  color: $white;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .chats__list {
@@ -75,6 +101,10 @@
     background-color: $chat-hover;
   }
 
+  &--selected {
+    background-color: $chat-hover;
+  }
+
   &__main-info {
     display: flex;
     gap: 10px;
@@ -87,6 +117,7 @@
     border-radius: 50%;
     background-color: $grey;
     padding: 5px;
+    object-fit: cover;
   }
 
   &__info {
@@ -143,6 +174,22 @@
   justify-content: space-between;
   width: 100%;
   padding: 20px;
+  position: relative;
+}
+
+.chats__empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.chats__empty-message {
+  color: $secondary-color;
+  font-size: $text-size-m;
+  text-align: center;
+  margin: 0;
 }
 
 .chat__current-header {
@@ -171,12 +218,56 @@
   font-weight: 700;
 }
 
+.chat__menu-wrapper {
+  position: relative;
+}
+
+.chat__menu-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 5px;
+  background-color: $white;
+  border: 1px solid $grey-border;
+  border-radius: $border-radius-xs;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  z-index: 1000;
+  min-width: 200px;
+
+  &--visible {
+    display: block;
+  }
+}
+
+.chat__menu-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: $text-size-xs;
+  color: $grey-dark;
+
+  &:hover {
+    background-color: $grey-light;
+  }
+
+  &:first-child {
+    border-top-left-radius: $border-radius-xs;
+    border-top-right-radius: $border-radius-xs;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: $border-radius-xs;
+    border-bottom-right-radius: $border-radius-xs;
+  }
+}
+
 .mainchat__content {
   position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow-y: auto;
 }
 
 .mainchat__message-date {
@@ -193,6 +284,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 20px 0;
 }
 
 .mainchat__message-container {
@@ -241,6 +333,7 @@
 .chat__send-message-button{
   border: none;
   background: transparent;
+  cursor: pointer;
 }
 
 .chat__attach-icon {
@@ -257,4 +350,91 @@
   background-color: $grey;
   border-radius: $border-radius-xs;
   font-size: $text-size-xs;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0 0 0 / 50%);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__content {
+  background-color: $white;
+  border-radius: $border-radius-xs;
+  padding: 20px;
+  min-width: 300px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+}
+
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h3 {
+    margin: 0;
+    font-size: $text-size-m;
+    font-weight: 500;
+  }
+}
+
+.modal__close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: $secondary-color;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    color: $accent-color;
+  }
+}
+
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal__form input {
+  padding: 12px;
+  border: 1px solid $grey-border;
+  border-radius: $border-radius-xs;
+  font-size: $text-size-xs;
+  outline: none;
+
+  &:focus {
+    border-color: $accent-color;
+  }
+}
+
+.modal__submit {
+  padding: 12px;
+  background-color: $accent-color;
+  color: $white;
+  border: none;
+  border-radius: $border-radius-xs;
+  font-size: $text-size-xs;
+  cursor: pointer;
+  font-weight: 500;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }

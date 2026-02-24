@@ -1,4 +1,6 @@
+import AuthAPI from '../../services/AuthAPI';
 import { Component } from '../../services/Component';
+import Router from '../../services/Router';
 import { ValidationForm } from '../../services/ValidationForm';
 import template from './loginPage.hbs';
 import './loginPage.scss';
@@ -32,36 +34,60 @@ export class LoginPage extends Component<LoginPageProps> {
     return template(this.props);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
-    if (!form) return;
+    if (!form) {
+      return;
+    }
 
-    // чтобы работало сразу на блюре
     new ValidationForm(form);
   }
 
-  private onSubmit(e: SubmitEvent) {
+  private async onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     const form = this.getContent().querySelector<HTMLFormElement>('.login__form');
-    if (!form) return;
+    if (!form) {
+      return;
+    }
 
     const validator = new ValidationForm(form);
 
     if (validator.validateForm()) {
       const values = validator.getValues();
-      console.log('✅ Form valid, collected values:', values);
-    } else {
-      console.log('❌ Form invalid');
+      const signInData = {
+        login: values.login as string,
+        password: values.password as string,
+      };
+
+      try {
+        const response = await AuthAPI.signIn(signInData);
+
+        if (response.status === 200) {
+          const router = new Router();
+          router.go('/messenger');
+        } else {
+          let errorMessage = response.statusText;
+          try {
+            const errorData = JSON.parse(response.responseText);
+            errorMessage = errorData.reason || errorData.message || errorMessage;
+          } catch (_error) {
+            // Если ответ не JSON, используем statusText.
+          }
+
+          console.error('Login failed:', response.status, errorMessage);
+          alert(`Ошибка входа: ${errorMessage}`);
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Произошла ошибка при входе. Проверьте консоль для деталей.');
+      }
     }
   }
 
   private onRegisterClick(e: MouseEvent) {
     e.preventDefault();
-    // Emit custom event for navigation
-    this.getContent().dispatchEvent(new CustomEvent('navigate', {
-      detail: { page: 'register' },
-      bubbles: true
-    }));
+    const router = new Router();
+    router.go('/sign-up');
   }
 }

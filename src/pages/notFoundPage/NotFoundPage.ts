@@ -1,4 +1,5 @@
 import { Component } from '../../services/Component';
+import Router from '../../services/Router';
 import template from './notFoundPage.hbs';
 import './notFoundPage.scss';
 
@@ -18,10 +19,7 @@ export class NotFoundPage extends Component {
 
   private onBackToChats(e: Event) {
     e.preventDefault();
-    // Emit custom event for navigation
-    this.getContent().dispatchEvent(new CustomEvent('navigate', {
-      detail: { page: 'chats' },
-      bubbles: true
-    }));
+    const router = new Router();
+    router.go('/messenger');
   }
 }

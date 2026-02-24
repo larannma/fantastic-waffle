@@ -1,4 +1,6 @@
+import AuthAPI from '../../services/AuthAPI';
 import { Component } from '../../services/Component';
+import Router from '../../services/Router';
 import { ValidationForm } from '../../services/ValidationForm';
 import template from './registerPage.hbs';
 import './registerPage.scss';
@@ -38,32 +40,64 @@ export class RegisterPage extends Component<RegisterPageProps> {
     return template(this.props);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
-    if (!form) return;
+    if (!form) {
+      return;
+    }
 
     new ValidationForm(form);
   }
 
-  private onSubmit(e: SubmitEvent) {
+  private async onSubmit(e: SubmitEvent) {
     e.preventDefault();
 
     const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
-    if (!form) return;
+    if (!form) {
+      return;
+    }
 
     const validator = new ValidationForm(form);
 
     if (validator.validateForm()) {
       const values = validator.getValues();
-      console.log('✅ Registration form valid, collected values:', values);
-    } else {
-      console.log('❌ Registration form invalid');
+      const signUpData = {
+        email: values.email as string,
+        login: values.login as string,
+        first_name: values.first_name as string,
+        second_name: values.second_name as string,
+        phone: values.phone as string,
+        password: values.password as string,
+      };
+
+      try {
+        const response = await AuthAPI.signUp(signUpData);
+
+        if (response.status === 200) {
+          const router = new Router();
+          router.go('/messenger');
+        } else {
+          let errorMessage = response.statusText;
+          try {
+            const errorData = JSON.parse(response.responseText);
+            errorMessage = errorData.reason || errorData.message || errorMessage;
+          } catch (_error) {
+            // Если ответ не JSON, используем statusText.
+          }
+
+          console.error('Registration failed:', response.status, errorMessage);
+          console.error('Response text:', response.responseText);
+          alert(`Ошибка регистрации: ${errorMessage}`);
+        }
+      } catch (error) {
+        console.error('Registration error:', error);
+        alert('Произошла ошибка при регистрации. Проверьте консоль для деталей.');
+      }
     }
   }
 
   private onRegisterClick(e: MouseEvent) {
     e.preventDefault();
-    // Trigger form submission
     const form = this.getContent().querySelector<HTMLFormElement>('.register__form');
     if (form) {
       form.dispatchEvent(new Event('submit', { bubbles: true }));
@@ -72,10 +106,7 @@ export class RegisterPage extends Component<RegisterPageProps> {
 
   private onSignInClick(e: MouseEvent) {
     e.preventDefault();
-    // Emit custom event for navigation
-    this.getContent().dispatchEvent(new CustomEvent('navigate', {
-      detail: { page: 'login' },
-      bubbles: true
-    }));
+    const router = new Router();
+    router.go('/');
   }
 }

@@ -66,8 +66,11 @@ export class Component<T extends ComponentProps = ComponentProps> {
     this.componentDidMount();
   }
 
-  // Может переопределяться в наследниках
+  // Может быть переопределён в дочернем классе.
   componentDidMount() {}
+
+  // Может быть переопределён в дочернем классе.
+  componentWillUnmount() {}
 
   dispatchComponentDidMount() {
     this._eventBus().emit(Component.EVENTS.FLOW_CDM);
@@ -81,7 +84,7 @@ export class Component<T extends ComponentProps = ComponentProps> {
     }
   };
 
-  // Может переопределяться в наследниках
+  // Может быть переопределён в дочернем классе.
   componentDidUpdate(oldProps: T, newProps: T): boolean {
     const keys = Object.keys(newProps);
 
@@ -115,7 +118,7 @@ export class Component<T extends ComponentProps = ComponentProps> {
     }
   }
 
-  // Должен переопределяться в наследниках
+  // Должен быть переопределён в дочернем классе.
   render(): string {
     return '';
   }
@@ -195,5 +198,10 @@ export class Component<T extends ComponentProps = ComponentProps> {
 
   hide() {
     if (this._element) this._element.style.display = 'none';
+  }
+
+  destroy() {
+    this.componentWillUnmount();
+    this._removeEvents();
   }
 }
