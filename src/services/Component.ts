@@ -26,6 +26,7 @@ export class Component<T extends ComponentProps = ComponentProps> {
   };
 
   private _element: HTMLElement | null = null;
+  private _isMounted = false;
   private _meta: IMeta;
   private _eventBus: () => EventBus;
   protected props: T;
@@ -49,7 +50,6 @@ export class Component<T extends ComponentProps = ComponentProps> {
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
-    eventBus.on(Component.EVENTS.FLOW_CDU, this._render.bind(this));
   }
 
   private _createResources() {
@@ -79,7 +79,6 @@ export class Component<T extends ComponentProps = ComponentProps> {
   private _componentDidUpdate = (oldProps: T, newProps: T) => {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) {
-      this._eventBus().emit(Component.EVENTS.FLOW_CDU);
       this._eventBus().emit(Component.EVENTS.FLOW_RENDER);
     }
   };
@@ -114,7 +113,11 @@ export class Component<T extends ComponentProps = ComponentProps> {
       this._element.innerHTML = block;
       this._setAttributes();
       this._addEvents();
-      this._componentDidMount();
+
+      if (!this._isMounted) {
+        this._isMounted = true;
+        this._componentDidMount();
+      }
     }
   }
 
@@ -181,16 +184,16 @@ export class Component<T extends ComponentProps = ComponentProps> {
   }
 
   private _setAttributes() {
-  Object.entries(this.props).forEach(([key, value]) => {
-    if (typeof value !== 'object') {
-      if (key === 'class') {
-        this._element!.className = value as string;
-      } else {
-        this._element!.setAttribute(key, value as string);
+    Object.entries(this.props).forEach(([key, value]) => {
+      if (typeof value !== 'object') {
+        if (key === 'class') {
+          this._element!.className = value as string;
+        } else {
+          this._element!.setAttribute(key, value as string);
+        }
       }
-    }
-  });
-}
+    });
+  }
 
   show() {
     if (this._element) this._element.style.display = 'block';
@@ -201,6 +204,7 @@ export class Component<T extends ComponentProps = ComponentProps> {
   }
 
   destroy() {
+    this._isMounted = false;
     this.componentWillUnmount();
     this._removeEvents();
   }
