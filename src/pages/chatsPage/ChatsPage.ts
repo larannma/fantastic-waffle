@@ -198,12 +198,52 @@ export class ChatsPage extends Component<ChatsPageProps> {
     try {
       const response = await ChatAPI.getChats();
       if (response.status === 200) {
-        this.chats = JSON.parse(response.responseText) as Chat[];
+        const chats = JSON.parse(response.responseText) as Chat[];
+        this.chats = chats.map((chat) => ({
+          ...chat,
+          last_message: chat.last_message
+            ? {
+                ...chat.last_message,
+                time: this.formatChatListTime(chat.last_message.time),
+              }
+            : null,
+        }));
         this.setProps({ chats: this.chats });
       }
     } catch (error) {
       console.error('Error loading chats:', error);
     }
+  }
+
+  private formatChatListTime(value: string): string {
+    if (!value) {
+      return '';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return value;
+    }
+
+    const now = new Date();
+    const isToday =
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear();
+
+    if (isToday) {
+      return date.toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+
+    const isCurrentYear = date.getFullYear() === now.getFullYear();
+    return date.toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      ...(isCurrentYear ? {} : { year: '2-digit' }),
+    });
   }
 
   private async loadChatUsers(chatId: number) {
