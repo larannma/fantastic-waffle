@@ -184,7 +184,6 @@
   padding: 20px;
   position: relative;
   overflow: hidden;
-  overflow: hidden;
 }
 
 .chats__empty-state {
@@ -273,10 +272,6 @@
   &_danger {
     color: $danger-color;
   }
-
-  &_danger {
-    color: $danger-color;
-  }
 }
 
 .mainchat__content {
@@ -301,10 +296,10 @@
 .mainchat__messages-wrapper {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  min-height: 100%;
+  margin-top: auto;
   gap: 12px;
   padding: 20px 0;
+  width: 100%;
 }
 
 .mainchat__message-container {
