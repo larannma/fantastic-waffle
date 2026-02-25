@@ -1,3 +1,5 @@
+import { WS_BASE_URL } from '../constants/api';
+
 export interface Message {
   id?: number | string;
   user_id: number | string;
@@ -25,27 +27,43 @@ class WebSocketService {
   private messageHandlers: MessageHandler[] = [];
   private openHandlers: OpenHandler[] = [];
   private pingInterval: number | undefined;
+  private pendingMessages: string[] = [];
 
   connect(chatId: number, userId?: number, token?: string) {
     this.close();
+    this.pendingMessages = [];
 
     const wsUrl = userId && token
-      ? `wss://ya-praktikum.tech/ws/chats/${userId}/${chatId}/${token}`
-      : `wss://ya-praktikum.tech/ws/chats/${chatId}/`;
+      ? `${WS_BASE_URL}/chats/${userId}/${chatId}/${token}`
+      : `${WS_BASE_URL}/chats/${chatId}/`;
 
-    this.socket = new WebSocket(wsUrl);
+    const socket = new WebSocket(wsUrl);
+    this.socket = socket;
 
-    this.socket.addEventListener('open', () => {
+    socket.addEventListener('open', () => {
+      if (this.socket !== socket) {
+        return;
+      }
+
       this.startPing();
+      this.flushPendingMessages();
       this.openHandlers.forEach((handler) => handler());
     });
 
-    this.socket.addEventListener('close', () => {
+    socket.addEventListener('close', () => {
+      if (this.socket !== socket) {
+        return;
+      }
+
       this.stopPing();
       this.socket = null;
     });
 
-    this.socket.addEventListener('message', (event) => {
+    socket.addEventListener('message', (event) => {
+      if (this.socket !== socket) {
+        return;
+      }
+
       try {
         const data: unknown = JSON.parse(event.data);
 
@@ -65,44 +83,34 @@ class WebSocketService {
       }
     });
 
-    this.socket.addEventListener('error', (error) => {
+    socket.addEventListener('error', (error) => {
+      if (this.socket !== socket) {
+        return;
+      }
+
       console.error('WebSocket error:', error);
     });
   }
 
   sendMessage(message: string) {
-    if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        JSON.stringify({
-          content: message,
-          type: 'message',
-        })
-      );
-    } else {
-      console.error('WebSocket is not open');
-    }
+    this.sendRaw({
+      content: message,
+      type: 'message',
+    });
   }
 
   sendFile(resourceId: string | number) {
-    if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        JSON.stringify({
-          content: String(resourceId),
-          type: 'file',
-        })
-      );
-    }
+    this.sendRaw({
+      content: String(resourceId),
+      type: 'file',
+    });
   }
 
   getOldMessages(offset: number = 0) {
-    if (this.socket?.readyState === WebSocket.OPEN) {
-      this.socket.send(
-        JSON.stringify({
-          content: String(offset),
-          type: 'get old',
-        })
-      );
-    }
+    this.sendRaw({
+      content: String(offset),
+      type: 'get old',
+    });
   }
 
   onMessage(handler: MessageHandler) {
@@ -124,10 +132,28 @@ class WebSocketService {
   close() {
     this.stopPing();
 
-    if (this.socket) {
-      this.socket.close();
-      this.socket = null;
+    const socket = this.socket;
+    this.socket = null;
+
+    if (socket) {
+      socket.close();
     }
+  }
+
+  private sendRaw(payload: Record<string, string>) {
+    const message = JSON.stringify(payload);
+
+    if (this.socket?.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+      return;
+    }
+
+    if (this.socket?.readyState === WebSocket.CONNECTING) {
+      this.pendingMessages.push(message);
+      return;
+    }
+
+    console.error('WebSocket is not open');
   }
 
   private startPing() {
@@ -138,6 +164,15 @@ class WebSocketService {
         this.socket.send(JSON.stringify({ type: 'ping' }));
       }
     }, 10000);
+  }
+
+  private flushPendingMessages() {
+    if (!this.socket || this.socket.readyState !== WebSocket.OPEN || !this.pendingMessages.length) {
+      return;
+    }
+
+    this.pendingMessages.forEach((message) => this.socket?.send(message));
+    this.pendingMessages = [];
   }
 
   private stopPing() {

@@ -1,6 +1,5 @@
+import { BASE_URL } from '../constants/api';
 import { HTTPTransport } from './HTTPTransport';
-
-const API_BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
 export interface SignUpData {
   first_name: string;
@@ -37,23 +36,23 @@ class AuthAPI {
   }
 
   signUp(data: SignUpData): Promise<XMLHttpRequest> {
-    return this.http.post(`${API_BASE_URL}/auth/signup`, {
+    return this.http.post(`${BASE_URL}/auth/signup`, {
       data,
     });
   }
 
   signIn(data: SignInData): Promise<XMLHttpRequest> {
-    return this.http.post(`${API_BASE_URL}/auth/signin`, {
+    return this.http.post(`${BASE_URL}/auth/signin`, {
       data,
     });
   }
 
   logout(): Promise<XMLHttpRequest> {
-    return this.http.post(`${API_BASE_URL}/auth/logout`);
+    return this.http.post(`${BASE_URL}/auth/logout`);
   }
 
   getUser(): Promise<XMLHttpRequest> {
-    return this.http.get(`${API_BASE_URL}/auth/user`);
+    return this.http.get(`${BASE_URL}/auth/user`);
   }
 }
 

@@ -1,8 +1,9 @@
-import AuthStore from '../../services/AuthStore';
-import ChatAPI from '../../services/ChatAPI';
-import type { Chat } from '../../services/ChatAPI';
+import { RESOURCES_URL } from '../../constants/api';
 import { Component } from '../../services/Component';
 import Router from '../../services/Router';
+import AuthStore from '../../services/AuthStore';
+import ChatAPI from '../../services/ChatAPI';
+import type { Chat, ChatUser } from '../../services/ChatAPI';
 import UserAPI from '../../services/UserAPI';
 import type { UserSearchResult } from '../../services/UserAPI';
 import WebSocketService from '../../services/WebSocketService';
@@ -13,6 +14,8 @@ import './chatsPage.scss';
 interface ChatsPageProps {
   class: string;
   chats: Chat[];
+  chatUsers: ChatUser[];
+  resourcesBaseUrl: string;
   selectedChatTitle: string;
   selectedChatId: number | null;
   '.chats__profile-link': {
@@ -33,16 +36,28 @@ interface ChatsPageProps {
   '#delete-user-form': {
     submit: (e: SubmitEvent) => void;
   };
+  '#change-chat-avatar-form': {
+    submit: (e: SubmitEvent) => void;
+  };
   '#close-add-user-modal': {
     click: () => void;
   };
   '#close-delete-user-modal': {
     click: () => void;
   };
+  '#close-change-chat-avatar-modal': {
+    click: () => void;
+  };
   '#add-user-menu-item': {
     click: (e: Event) => void;
   };
   '#delete-user-menu-item': {
+    click: (e: Event) => void;
+  };
+  '#change-chat-avatar-menu-item': {
+    click: (e: Event) => void;
+  };
+  '#delete-chat-menu-item': {
     click: (e: Event) => void;
   };
   '#add-chat-button': {
@@ -61,6 +76,7 @@ type CreateChatResponse = { id: number };
 
 export class ChatsPage extends Component<ChatsPageProps> {
   private chats: Chat[] = [];
+  private chatUsers: ChatUser[] = [];
   private messages: Message[] = [];
   private chatsLoaded = false;
   private selectedChatId: number | null = null;
@@ -78,6 +94,8 @@ export class ChatsPage extends Component<ChatsPageProps> {
     super('main', {
       class: 'main',
       chats: [],
+      chatUsers: [],
+      resourcesBaseUrl: RESOURCES_URL,
       selectedChatTitle: '',
       selectedChatId: null,
       '.chats__profile-link': {
@@ -98,17 +116,29 @@ export class ChatsPage extends Component<ChatsPageProps> {
       '#delete-user-form': {
         submit: (e: SubmitEvent) => this.onDeleteUserSubmit(e),
       },
+      '#change-chat-avatar-form': {
+        submit: (e: SubmitEvent) => this.onChangeChatAvatarSubmit(e),
+      },
       '#close-add-user-modal': {
         click: () => this.closeAddUserModal(),
       },
       '#close-delete-user-modal': {
         click: () => this.closeDeleteUserModal(),
       },
+      '#close-change-chat-avatar-modal': {
+        click: () => this.closeChangeChatAvatarModal(),
+      },
       '#add-user-menu-item': {
         click: (e: Event) => this.onAddUserMenuClick(e),
       },
       '#delete-user-menu-item': {
         click: (e: Event) => this.onDeleteUserMenuClick(e),
+      },
+      '#change-chat-avatar-menu-item': {
+        click: (e: Event) => this.onChangeChatAvatarMenuClick(e),
+      },
+      '#delete-chat-menu-item': {
+        click: (e: Event) => this.onDeleteChatMenuClick(e),
       },
       '#add-chat-button': {
         click: (e: Event) => this.onAddChatClick(e),
@@ -126,6 +156,8 @@ export class ChatsPage extends Component<ChatsPageProps> {
     return template({
       ...this.props,
       chats: this.chats,
+      chatUsers: this.chatUsers,
+      resourcesBaseUrl: RESOURCES_URL,
       selectedChatTitle: this.selectedChatTitle,
       selectedChatId: this.selectedChatId,
     });
@@ -149,6 +181,7 @@ export class ChatsPage extends Component<ChatsPageProps> {
   componentDidUpdate(oldProps: ChatsPageProps, newProps: ChatsPageProps): boolean {
     return (
       oldProps.chats !== newProps.chats ||
+      oldProps.chatUsers !== newProps.chatUsers ||
       oldProps.selectedChatTitle !== newProps.selectedChatTitle ||
       oldProps.selectedChatId !== newProps.selectedChatId
     );
@@ -170,6 +203,20 @@ export class ChatsPage extends Component<ChatsPageProps> {
       }
     } catch (error) {
       console.error('Error loading chats:', error);
+    }
+  }
+
+  private async loadChatUsers(chatId: number) {
+    try {
+      const response = await ChatAPI.getChatUsers(chatId);
+      if (response.status === 200) {
+        const users = JSON.parse(response.responseText) as ChatUser[];
+        const currentUserId = AuthStore.getUser()?.id;
+        this.chatUsers = users.filter((user) => user.id !== currentUserId);
+        this.setProps({ chatUsers: this.chatUsers });
+      }
+    } catch (error) {
+      console.error('Error loading chat users:', error);
     }
   }
 
@@ -205,7 +252,7 @@ export class ChatsPage extends Component<ChatsPageProps> {
       }`;
 
       if ((message.type === 'file' || message.type === 'sticker') && message.file?.path) {
-        const fileUrl = `https://ya-praktikum.tech/api/v2/resources/${message.file.path}`;
+        const fileUrl = `${RESOURCES_URL}/${message.file.path}`;
 
         if (message.type === 'sticker' && message.file.content_type.startsWith('image/')) {
           const sticker = document.createElement('img');
@@ -248,12 +295,7 @@ export class ChatsPage extends Component<ChatsPageProps> {
       return;
     }
 
-    const chat = this.chats.find((item) => item.id === chatId);
-    if (!chat) {
-      return;
-    }
-
-    await this.selectChat(chat.id);
+    await this.selectChat(chatId);
   }
 
   private async selectChat(chatId: number) {
@@ -265,9 +307,15 @@ export class ChatsPage extends Component<ChatsPageProps> {
     this.selectedChatId = chatId;
     this.selectedChatTitle = chat.title;
     this.messages = [];
+    this.chatUsers = [];
     this.persistSelectedChat(chatId);
-    this.setProps({ selectedChatTitle: chat.title, selectedChatId: chatId });
-    await this.connectToChat(chatId);
+    this.setProps({
+      chatUsers: this.chatUsers,
+      selectedChatTitle: chat.title,
+      selectedChatId: chatId,
+    });
+
+    await Promise.all([this.connectToChat(chatId), this.loadChatUsers(chatId)]);
   }
 
   private async connectToChat(chatId: number) {
@@ -284,7 +332,6 @@ export class ChatsPage extends Component<ChatsPageProps> {
         return;
       }
 
-      // Запасной вариант для websocket-эндпоинта, который работает только через cookie.
       WebSocketService.connect(chatId);
     } catch (error) {
       console.error('Error getting chat token:', error);
@@ -358,10 +405,62 @@ export class ChatsPage extends Component<ChatsPageProps> {
     this.openAddUserModal();
   }
 
-  private onDeleteUserMenuClick(e: Event) {
+  private async onDeleteUserMenuClick(e: Event) {
     e.preventDefault();
     this.closeMenu();
+
+    if (!this.selectedChatId) {
+      alert('Сначала выберите чат');
+      return;
+    }
+
+    await this.loadChatUsers(this.selectedChatId);
     this.openDeleteUserModal();
+  }
+
+  private onChangeChatAvatarMenuClick(e: Event) {
+    e.preventDefault();
+    this.closeMenu();
+    this.openChangeChatAvatarModal();
+  }
+
+  private async onDeleteChatMenuClick(e: Event) {
+    e.preventDefault();
+    this.closeMenu();
+
+    if (!this.selectedChatId) {
+      alert('Сначала выберите чат');
+      return;
+    }
+
+    const shouldDelete = window.confirm('Удалить чат без возможности восстановления?');
+    if (!shouldDelete) {
+      return;
+    }
+
+    try {
+      const response = await ChatAPI.deleteChat(this.selectedChatId);
+      if (response.status !== 200) {
+        alert('Не удалось удалить чат');
+        return;
+      }
+
+      this.messages = [];
+      this.chatUsers = [];
+      this.selectedChatId = null;
+      this.selectedChatTitle = '';
+      this.clearStoredChatId();
+      WebSocketService.close();
+      this.setProps({
+        chatUsers: this.chatUsers,
+        selectedChatId: null,
+        selectedChatTitle: '',
+      });
+      await this.loadChats();
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+      alert('Не удалось удалить чат');
+    }
   }
 
   private closeMenu() {
@@ -409,6 +508,25 @@ export class ChatsPage extends Component<ChatsPageProps> {
     }
   }
 
+  private openChangeChatAvatarModal() {
+    const modal = this.getContent().querySelector<HTMLElement>('#change-chat-avatar-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+    }
+  }
+
+  private closeChangeChatAvatarModal() {
+    const modal = this.getContent().querySelector<HTMLElement>('#change-chat-avatar-modal');
+    if (modal) {
+      modal.style.display = 'none';
+    }
+
+    const form = this.getContent().querySelector<HTMLFormElement>('#change-chat-avatar-form');
+    if (form) {
+      form.reset();
+    }
+  }
+
   private async findUserByLogin(login: string): Promise<UserSearchResult | null> {
     const response = await UserAPI.searchUsers(login);
     if (response.status !== 200) {
@@ -443,8 +561,13 @@ export class ChatsPage extends Component<ChatsPageProps> {
         return;
       }
 
-      const response = await ChatAPI.addUserToChat([user.id], this.selectedChatId);
+      const response = await ChatAPI.addUserToChat({
+        users: [user.id],
+        chatId: this.selectedChatId,
+      });
+
       if (response.status === 200) {
+        await this.loadChatUsers(this.selectedChatId);
         this.closeAddUserModal();
       } else {
         alert('Ошибка при добавлении пользователя');
@@ -462,21 +585,21 @@ export class ChatsPage extends Component<ChatsPageProps> {
       return;
     }
 
-    const input = this.getContent().querySelector<HTMLInputElement>('#delete-user-login-input');
-    const login = input?.value.trim() || '';
-    if (!login) {
+    const select = this.getContent().querySelector<HTMLSelectElement>('#delete-user-select');
+    const selectedUserId = Number(select?.value);
+    if (!selectedUserId) {
+      alert('Выберите пользователя');
       return;
     }
 
     try {
-      const user = await this.findUserByLogin(login);
-      if (!user) {
-        alert('Пользователь не найден');
-        return;
-      }
+      const response = await ChatAPI.deleteUserFromChat({
+        users: [selectedUserId],
+        chatId: this.selectedChatId,
+      });
 
-      const response = await ChatAPI.deleteUserFromChat([user.id], this.selectedChatId);
       if (response.status === 200) {
+        await this.loadChatUsers(this.selectedChatId);
         this.closeDeleteUserModal();
       } else {
         alert('Ошибка при удалении пользователя');
@@ -487,6 +610,38 @@ export class ChatsPage extends Component<ChatsPageProps> {
     }
   }
 
+  private async onChangeChatAvatarSubmit(e: SubmitEvent) {
+    e.preventDefault();
+    if (!this.selectedChatId) {
+      alert('Сначала выберите чат');
+      return;
+    }
+
+    const input = this.getContent().querySelector<HTMLInputElement>('#chat-avatar-input');
+    const file = input?.files?.[0];
+    if (!file) {
+      alert('Выберите файл');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('chatId', String(this.selectedChatId));
+    formData.append('avatar', file);
+
+    try {
+      const response = await ChatAPI.changeChatAvatar(formData);
+      if (response.status === 200) {
+        await this.loadChats();
+        this.closeChangeChatAvatarModal();
+      } else {
+        alert('Не удалось обновить аватар чата');
+      }
+    } catch (error) {
+      console.error('Error changing chat avatar:', error);
+      alert('Не удалось обновить аватар чата');
+    }
+  }
+
   private onSendMessage(e: SubmitEvent) {
     e.preventDefault();
     if (!this.selectedChatId) {
@@ -494,13 +649,17 @@ export class ChatsPage extends Component<ChatsPageProps> {
     }
 
     const input = this.getContent().querySelector<HTMLInputElement>('.chat__send-message-input');
-    const message = input?.value.trim() || '';
+    if (!input) {
+      return;
+    }
+
+    const message = input.value.trim();
     if (!message) {
       return;
     }
 
     WebSocketService.sendMessage(message);
-    input!.value = '';
+    input.value = '';
   }
 
   private onAddChatClick(e: Event) {
@@ -545,12 +704,7 @@ export class ChatsPage extends Component<ChatsPageProps> {
 
       const newChat = JSON.parse(createResponse.responseText) as CreateChatResponse;
       await this.loadChats();
-
-      const createdChat = this.chats.find((chat) => chat.id === newChat.id);
-      if (createdChat) {
-        await this.selectChat(createdChat.id);
-      }
-
+      await this.selectChat(newChat.id);
       this.closeCreateChatModal();
     } catch (error) {
       console.error('Error creating chat:', error);
