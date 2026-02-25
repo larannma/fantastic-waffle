@@ -1,10 +1,10 @@
+import { RESOURCES_URL } from '../../constants/api';
 import type { User } from '../../services/AuthAPI';
 import AuthStore from '../../services/AuthStore';
 import { Component } from '../../services/Component';
 import Router from '../../services/Router';
 import UserAPI from '../../services/UserAPI';
 import { ValidationForm } from '../../services/ValidationForm';
-import { RESOURCES_URL } from '../../constants/api';
 import template from './profilePage.hbs';
 import './profilePage.scss';
 

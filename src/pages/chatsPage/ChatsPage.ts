@@ -1,9 +1,9 @@
 import { RESOURCES_URL } from '../../constants/api';
-import { Component } from '../../services/Component';
-import Router from '../../services/Router';
 import AuthStore from '../../services/AuthStore';
 import ChatAPI from '../../services/ChatAPI';
 import type { Chat, ChatUser } from '../../services/ChatAPI';
+import { Component } from '../../services/Component';
+import Router from '../../services/Router';
 import UserAPI from '../../services/UserAPI';
 import type { UserSearchResult } from '../../services/UserAPI';
 import WebSocketService from '../../services/WebSocketService';
