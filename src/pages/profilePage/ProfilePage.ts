@@ -1,3 +1,4 @@
+import { RESOURCES_URL } from '../../constants/api';
 import type { User } from '../../services/AuthAPI';
 import AuthStore from '../../services/AuthStore';
 import { Component } from '../../services/Component';
@@ -96,7 +97,7 @@ export class ProfilePage extends Component<ProfilePageProps> {
     if (displayNameInput) displayNameInput.value = user.display_name || '';
     if (phoneInput) phoneInput.value = user.phone || '';
     if (avatarImg && user.avatar) {
-      avatarImg.src = `https://ya-praktikum.tech/api/v2/resources${user.avatar}`;
+      avatarImg.src = `${RESOURCES_URL}${user.avatar}`;
     }
 
     const nameElement = this.getContent().querySelector('.profile__top-info p');

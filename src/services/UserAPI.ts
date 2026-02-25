@@ -1,6 +1,5 @@
+import { BASE_URL } from '../constants/api';
 import { HTTPTransport } from './HTTPTransport';
-
-const API_BASE_URL = 'https://ya-praktikum.tech/api/v2';
 
 export interface UserProfileData {
   first_name: string;
@@ -37,25 +36,25 @@ class UserAPI {
   }
 
   changeProfile(data: UserProfileData): Promise<XMLHttpRequest> {
-    return this.http.put(`${API_BASE_URL}/user/profile`, {
+    return this.http.put(`${BASE_URL}/user/profile`, {
       data,
     });
   }
 
   changeAvatar(data: FormData): Promise<XMLHttpRequest> {
-    return this.http.put(`${API_BASE_URL}/user/profile/avatar`, {
+    return this.http.put(`${BASE_URL}/user/profile/avatar`, {
       data,
     });
   }
 
   changePassword(data: ChangePasswordData): Promise<XMLHttpRequest> {
-    return this.http.put(`${API_BASE_URL}/user/password`, {
+    return this.http.put(`${BASE_URL}/user/password`, {
       data,
     });
   }
 
   searchUsers(login: string): Promise<XMLHttpRequest> {
-    return this.http.post(`${API_BASE_URL}/user/search`, {
+    return this.http.post(`${BASE_URL}/user/search`, {
       data: { login },
     });
   }

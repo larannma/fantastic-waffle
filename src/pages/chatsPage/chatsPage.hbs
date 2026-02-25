@@ -15,7 +15,7 @@
         <li class="chat {{#if (eq id ../selectedChatId)}}chat--selected{{/if}}" data-chat-id="{{id}}">
           <div class="chat__main-info">
             {{#if avatar}}
-            <img class="chat__img" src="https://ya-praktikum.tech/api/v2/resources{{avatar}}" alt="{{title}}" />
+            <img class="chat__img" src="{{../resourcesBaseUrl}}{{avatar}}" alt="{{title}}" />
             {{else}}
             <img class="chat__img" src="/icons/chat-svgrepo-com.svg" alt="{{title}}" />
             {{/if}}
@@ -55,6 +55,8 @@
         <div class="chat__menu-dropdown" id="chat-menu-dropdown">
           <div class="chat__menu-item" id="add-user-menu-item">Добавить пользователя</div>
           <div class="chat__menu-item" id="delete-user-menu-item">Удалить пользователя</div>
+          <div class="chat__menu-item" id="change-chat-avatar-menu-item">Изменить аватар чата</div>
+          <div class="chat__menu-item chat__menu-item_danger" id="delete-chat-menu-item">Удалить чат</div>
         </div>
       </div>
     </div>
@@ -103,7 +105,17 @@
         <button class="modal__close" id="close-delete-user-modal">&times;</button>
       </div>
       <form class="modal__form" id="delete-user-form">
-        <input type="text" id="delete-user-login-input" placeholder="Логин пользователя" required />
+        <select id="delete-user-select" required>
+          {{#if chatUsers.length}}
+          {{#each chatUsers}}
+          <option value="{{id}}">
+            {{#if display_name}}{{display_name}}{{else}}{{first_name}} {{second_name}}{{/if}} ({{login}})
+          </option>
+          {{/each}}
+          {{else}}
+          <option value="">Нет пользователей для удаления</option>
+          {{/if}}
+        </select>
         <button type="submit" class="modal__submit">Удалить</button>
       </form>
     </div>
@@ -119,6 +131,20 @@
       <form class="modal__form" id="create-chat-form">
         <input type="text" id="create-chat-title-input" placeholder="Название чата" required />
         <button type="submit" class="modal__submit">Создать чат</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Модалка изменения аватара чата -->
+  <div class="modal" id="change-chat-avatar-modal">
+    <div class="modal__content">
+      <div class="modal__header">
+        <h3>Изменить аватар чата</h3>
+        <button class="modal__close" id="close-change-chat-avatar-modal">&times;</button>
+      </div>
+      <form class="modal__form" id="change-chat-avatar-form">
+        <input type="file" id="chat-avatar-input" accept="image/*" required />
+        <button type="submit" class="modal__submit">Сохранить</button>
       </form>
     </div>
   </div>
