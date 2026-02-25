@@ -184,6 +184,7 @@
   padding: 20px;
   position: relative;
   overflow: hidden;
+  overflow: hidden;
 }
 
 .chats__empty-state {
@@ -267,6 +268,10 @@
   &:last-child {
     border-bottom-left-radius: $border-radius-xs;
     border-bottom-right-radius: $border-radius-xs;
+  }
+
+  &_danger {
+    color: $danger-color;
   }
 
   &_danger {
@@ -427,6 +432,8 @@
   gap: 16px;
 }
 
+.modal__form input,
+.modal__form select {
 .modal__form input,
 .modal__form select {
   padding: 12px;
