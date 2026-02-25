@@ -13,12 +13,16 @@
   width: 100%;
   height: 100%;
   min-height: 0;
+  height: 100%;
+  min-height: 0;
   background-color: $grey-light;
 }
 
 .chats__wrapper {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  min-height: 0;
   height: 100%;
   min-height: 0;
 
@@ -86,6 +90,8 @@
 .chats__list {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   flex: 1;
   min-height: 0;
   margin: 0;
@@ -175,14 +181,17 @@
 
 .chats__current-chat {
   box-sizing: border-box;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
   height: 100%;
+  height: 100%;
   min-height: 0;
   padding: 20px;
   position: relative;
+  overflow: hidden;
   overflow: hidden;
 }
 
@@ -272,10 +281,16 @@
   &_danger {
     color: $danger-color;
   }
+
+  &_danger {
+    color: $danger-color;
+  }
 }
 
 .mainchat__content {
   position: relative;
+  display: flex;
+  flex-direction: column;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -431,6 +446,8 @@
 .modal__form select {
 .modal__form input,
 .modal__form select {
+.modal__form input,
+.modal__form select {
   padding: 12px;
   border: 1px solid $grey-border;
   border-radius: $border-radius-xs;
@@ -454,6 +471,8 @@
 
   &:hover {
     opacity: 0.9;
+  }
+}
   }
 }
 }
