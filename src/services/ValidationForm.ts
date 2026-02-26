@@ -66,9 +66,11 @@ export class ValidationForm {
   /** Публичный метод для получения значений всех полей */
   public getValues(): Record<string, string> {
     const values: Record<string, string> = {};
-    Object.keys(this.rules).forEach((field) => {
-      const input = this.form.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#${field}`);
-      if (input) values[field] = input.value;
+    const formData = new FormData(this.form);
+    formData.forEach((value, key) => {
+      if (typeof value === 'string') {
+        values[key] = value;
+      }
     });
     return values;
   }
@@ -83,7 +85,6 @@ export class ValidationForm {
     return errorEl;
   }
 
-  // --- regex rules ---
   private validateFirstName(value: string): string | null {
     return /^[A-ZА-ЯЁ][a-zа-яёA-ZА-ЯЁ-]*$/.test(value) ? null : 'Invalid name';
   }
