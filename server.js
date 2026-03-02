@@ -1,15 +1,32 @@
 import express from 'express';
 import path from 'path';
-import dotenv from 'dotenv'
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-app.use(express.static('./dist'))
+
+app.use(express.static(path.join(__dirname, './dist')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, './dist/index.html'))
-})
+  res.sendFile(path.join(__dirname, './dist/index.html'));
+});
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT} http://localhost:3000/`))
+app.get('/sign-up', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist/index.html'));
+});
+
+app.get('/settings', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist/index.html'));
+});
+
+app.get('/messenger', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist/index.html'));
+});
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT} http://localhost:${PORT}/`));

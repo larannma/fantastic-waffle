@@ -20,7 +20,7 @@ export class EventBus {
     if (!this._hasEvent(eventName)){
       return;
     }
-    this.events[eventName].filter((fn) => fn !== callback);
+    this.events[eventName] = this.events[eventName].filter((fn) => fn !== callback);
   }
 
   emit(eventName: string) {

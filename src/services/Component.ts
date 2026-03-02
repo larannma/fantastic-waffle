@@ -26,6 +26,7 @@ export class Component<T extends ComponentProps = ComponentProps> {
   };
 
   private _element: HTMLElement | null = null;
+  private _isMounted = false;
   private _meta: IMeta;
   private _eventBus: () => EventBus;
   protected props: T;
@@ -49,7 +50,6 @@ export class Component<T extends ComponentProps = ComponentProps> {
     eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
-    eventBus.on(Component.EVENTS.FLOW_CDU, this._render.bind(this));
   }
 
   private _createResources() {
@@ -66,8 +66,11 @@ export class Component<T extends ComponentProps = ComponentProps> {
     this.componentDidMount();
   }
 
-  // Может переопределяться в наследниках
+  // Может быть переопределён в дочернем классе.
   componentDidMount() {}
+
+  // Может быть переопределён в дочернем классе.
+  componentWillUnmount() {}
 
   dispatchComponentDidMount() {
     this._eventBus().emit(Component.EVENTS.FLOW_CDM);
@@ -76,12 +79,11 @@ export class Component<T extends ComponentProps = ComponentProps> {
   private _componentDidUpdate = (oldProps: T, newProps: T) => {
     const shouldUpdate = this.componentDidUpdate(oldProps, newProps);
     if (shouldUpdate) {
-      this._eventBus().emit(Component.EVENTS.FLOW_CDU);
       this._eventBus().emit(Component.EVENTS.FLOW_RENDER);
     }
   };
 
-  // Может переопределяться в наследниках
+  // Может быть переопределён в дочернем классе.
   componentDidUpdate(oldProps: T, newProps: T): boolean {
     const keys = Object.keys(newProps);
 
@@ -111,11 +113,15 @@ export class Component<T extends ComponentProps = ComponentProps> {
       this._element.innerHTML = block;
       this._setAttributes();
       this._addEvents();
-      this._componentDidMount();
+
+      if (!this._isMounted) {
+        this._isMounted = true;
+        this._componentDidMount();
+      }
     }
   }
 
-  // Должен переопределяться в наследниках
+  // Должен быть переопределён в дочернем классе.
   render(): string {
     return '';
   }
@@ -178,16 +184,16 @@ export class Component<T extends ComponentProps = ComponentProps> {
   }
 
   private _setAttributes() {
-  Object.entries(this.props).forEach(([key, value]) => {
-    if (typeof value !== 'object') {
-      if (key === 'class') {
-        this._element!.className = value as string;
-      } else {
-        this._element!.setAttribute(key, value as string);
+    Object.entries(this.props).forEach(([key, value]) => {
+      if (typeof value !== 'object') {
+        if (key === 'class') {
+          this._element!.className = value as string;
+        } else {
+          this._element!.setAttribute(key, value as string);
+        }
       }
-    }
-  });
-}
+    });
+  }
 
   show() {
     if (this._element) this._element.style.display = 'block';
@@ -195,5 +201,11 @@ export class Component<T extends ComponentProps = ComponentProps> {
 
   hide() {
     if (this._element) this._element.style.display = 'none';
+  }
+
+  destroy() {
+    this._isMounted = false;
+    this.componentWillUnmount();
+    this._removeEvents();
   }
 }
