@@ -1,12 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🔹 Husky pre-commit hook is running"
-
-# ✅ Load NVM so npm is available
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-# ✅ Run lint with the correct Node/NPM
-npm run lint:fix
-npm run lint || exit 1
+npm run precommit

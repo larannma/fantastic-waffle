@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["mocha", "node", "chai"],
+    "noUncheckedSideEffectImports": false
+  },
+  "include": ["src/**/*", "test/**/*.ts"]
+}
