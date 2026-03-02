@@ -1,33 +1,79 @@
 # Fantastic Waffle
 
-Аналог мессенджера вроде Telegram. Приложение позволяет регистрироваться, авторизоваться, просматривать чаты, обмениваться сообщениями в реальном времени и управлять профилем пользователя.
+Веб-приложение-мессенджер (учебный аналог Telegram) на TypeScript. В проекте реализованы:
+
+- авторизация и регистрация;
+- список чатов;
+- страница профиля;
+- страницы ошибок `404` и `500`;
+- клиентская навигация между экранами.
 
 ![Fantastic Waffle Logo](./fantastic-waffle.png)
 
+[Figma-макет](https://www.figma.com/design/UcGHGaVBO55ydc7s5gucfN/Chat_external_link--Copy-?node-id=1-498&t=QS3E2sWImRb3lX6A-0)
 
-👉 [Ссылка на макет](https://www.figma.com/design/UcGHGaVBO55ydc7s5gucfN/Chat_external_link--Copy-?node-id=1-498&t=QS3E2sWImRb3lX6A-0)
+## Демо
 
+[https://glistening-biscuit-be70f5.netlify.app/](https://glistening-biscuit-be70f5.netlify.app/)
 
-## 🔗 Демо  
-Приложение доступно по ссылке:  
-👉 [https://glistening-biscuit-be70f5.netlify.app/](https://glistening-biscuit-be70f5.netlify.app/)
+## Технологии
 
-- Маршруты:
-  - `/` — страница входа
-  - `/sign-up` — страница регистрации
-  - `/settings` — настройки профиля пользователя
-  - `/messenger` — страница чатов
+- TypeScript
+- Vite
+- Handlebars
+- SCSS
+- Express (для отдачи сборки)
+- ESLint + Prettier + Stylelint
+- Mocha + Chai + JSDOM (unit-тесты)
+- Husky (pre-commit)
 
-## 📦 Скрипты  
+## Установка
+
 ```bash
-# Запуск проекта в режиме разработки
+npm install
+```
+
+## Запуск
+
+```bash
+# режим разработки
 npm run dev
 
-# Сборка проекта и запуск сервера
+# production-сборка + запуск express-сервера
 npm start
 
-# Сборка TypeScript + Vite
+# только сборка
 npm run build
 
-# Предпросмотр собранного проекта
+# предпросмотр production-сборки
 npm run preview
+```
+
+## Тесты
+
+```bash
+# однократный запуск unit-тестов
+npm test
+
+# запуск тестов в watch-режиме
+npm run test:watch
+```
+
+Тестовые файлы расположены рядом с тестируемыми модулями:
+
+- `src/components/routes/Routes.test.ts`
+- `src/services/Component.test.ts`
+- `src/services/HTTPTransport.test.ts`
+
+## Качество кода
+
+```bash
+npm run lint
+npm run stylelint
+```
+
+На `pre-commit` автоматически запускаются:
+
+- `npm run lint`
+- `npm run stylelint`
+- `npm run test`
